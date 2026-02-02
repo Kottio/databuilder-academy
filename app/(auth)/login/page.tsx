@@ -3,12 +3,14 @@
 import { signIn } from "@/app/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,7 +22,7 @@ export default function LoginPage() {
         email,
         password,
       });
-      // Better Auth will handle redirect
+      router.push("/dashboard");
     } catch (err) {
       setError("Invalid email or password");
     } finally {

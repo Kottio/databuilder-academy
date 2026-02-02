@@ -3,6 +3,7 @@
 import { signUp } from "@/app/lib/auth-client";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 export default function SignupPage() {
   const [name, setName] = useState("");
@@ -10,6 +11,7 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -17,12 +19,22 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      await signUp.email({
+      const result = await signUp.email({
         name,
         email,
         password,
       });
-      // Better Auth will handle redirect
+      console.log("From signup", result);
+      if (result.data) {
+        await fetch("/api/student", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: result.data.user.id,
+          }),
+        });
+      }
+      router.push("/dashboard");
     } catch (err) {
       setError("Failed to create account. Email might already be in use.");
     } finally {

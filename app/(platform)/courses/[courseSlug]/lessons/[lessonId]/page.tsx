@@ -122,11 +122,13 @@ export default function LessonViewerPage() {
                       {resource.type === "download"
                         ? "📥"
                         : resource.type === "github"
-                        ? "💻"
-                        : "🔗"}
+                          ? "💻"
+                          : "🔗"}
                     </span>
                     <div>
-                      <div className="text-sm font-medium">{resource.title}</div>
+                      <div className="text-sm font-medium">
+                        {resource.title}
+                      </div>
                       {resource.description && (
                         <div className="text-xs text-zinc-600 dark:text-zinc-400">
                           {resource.description}

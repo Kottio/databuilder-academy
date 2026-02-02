@@ -17,7 +17,7 @@ export function LessonSidebar({
   completedLessonIds = [],
 }: LessonSidebarProps) {
   return (
-    <div className="p-4">
+    <div className="p-4 pt-20">
       <Link
         href={`/courses/${courseSlug}`}
         className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block"
@@ -61,8 +61,8 @@ export function LessonSidebar({
                         isCurrentLesson
                           ? "bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100 font-medium"
                           : isLocked
-                          ? "text-zinc-400 cursor-not-allowed"
-                          : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                            ? "text-zinc-400 cursor-not-allowed"
+                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
                       }`}
                       onClick={(e) => isLocked && e.preventDefault()}
                     >
