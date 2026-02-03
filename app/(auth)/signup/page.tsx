@@ -19,21 +19,12 @@ export default function SignupPage() {
     setLoading(true);
 
     try {
-      const result = await signUp.email({
+      await signUp.email({
         name,
         email,
         password,
       });
-      console.log("From signup", result);
-      if (result.data) {
-        await fetch("/api/student", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            userId: result.data.user.id,
-          }),
-        });
-      }
+      // Student and enrollment are automatically created via Better Auth hook
       router.push("/dashboard");
     } catch (err) {
       setError("Failed to create account. Email might already be in use.");
