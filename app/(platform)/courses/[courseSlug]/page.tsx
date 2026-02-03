@@ -18,11 +18,11 @@ export default function CourseOverviewPage() {
   );
 
   if (isLoading) {
-    return <div className="mx-auto max-w-5xl px-4 py-12">Loading...</div>;
+    return <div className="mx-auto max-w-5xl px-4 py-12 text-zinc-400">Loading...</div>;
   }
 
   if (isError || !data) {
-    return <div className="mx-auto max-w-5xl px-4 py-12">Course not found</div>;
+    return <div className="mx-auto max-w-5xl px-4 py-12 text-red-400">Course not found</div>;
   }
 
   const { course, accessType } = data;
@@ -40,30 +40,30 @@ export default function CourseOverviewPage() {
       <div className="mb-8">
         <Link
           href="/dashboard"
-          className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block"
+          className="text-sm text-emerald-400 hover:text-emerald-300 mb-4 inline-block transition-colors"
         >
           ← Back to Dashboard
         </Link>
 
-        <h1 className="text-4xl font-bold text-zinc-900 dark:text-zinc-100 mb-4">
+        <h1 className="text-4xl font-bold text-white mb-4">
           {course.title}
         </h1>
 
-        <p className="text-lg text-zinc-600 dark:text-zinc-400 mb-6">
+        <p className="text-lg text-zinc-400 mb-6">
           {course.description}
         </p>
 
         {/* Progress Bar */}
-        <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-4 mb-6">
-          <div className="flex justify-between text-sm text-zinc-600 dark:text-zinc-400 mb-2">
+        <div className="bg-[#161820] rounded-lg border border-zinc-800/60 p-4 mb-6">
+          <div className="flex justify-between text-sm text-zinc-400 mb-2">
             <span>Your Progress</span>
             <span>
               {completedLessons} / {totalLessons} lessons completed
             </span>
           </div>
-          <div className="h-3 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+          <div className="h-3 bg-zinc-800 rounded-full overflow-hidden">
             <div
-              className="h-full bg-blue-600 transition-all"
+              className="h-full bg-emerald-500 transition-all"
               style={{ width: `${progressPercentage}%` }}
             />
           </div>
@@ -71,11 +71,11 @@ export default function CourseOverviewPage() {
 
         {/* Enrollment Status */}
         {accessType !== "PAID" && (
-          <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
-            <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
+          <div className="bg-emerald-950/30 border border-emerald-800/40 rounded-lg p-4 mb-6">
+            <p className="text-sm text-emerald-200 mb-2">
               <strong>Module 1 is free!</strong> Upgrade to access all modules
             </p>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded text-sm">
+            <button className="bg-emerald-600 hover:bg-emerald-500 text-white font-medium px-4 py-2 rounded text-sm transition-colors">
               Get Full Access - €{(course.price / 100).toFixed(0)}
             </button>
           </div>

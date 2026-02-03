@@ -20,12 +20,12 @@ export function LessonSidebar({
     <div className="p-4 pt-20">
       <Link
         href={`/courses/${course.course.slug}`}
-        className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block"
+        className="text-sm text-emerald-400 hover:text-emerald-300 mb-4 inline-block transition-colors"
       >
         ← Course Overview
       </Link>
 
-      <h2 className="font-semibold text-lg mb-4">Course Content</h2>
+      <h2 className="font-semibold text-lg text-zinc-200 mb-4">Course Content</h2>
 
       <div className="space-y-4">
         {course.course.modules.map((module) => {
@@ -38,13 +38,13 @@ export function LessonSidebar({
           return (
             <div key={module.id}>
               <div className="flex items-center justify-between mb-2">
-                <h3 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                <h3 className="text-sm font-medium text-zinc-400">
                   {module.title}
                 </h3>
                 {module.accessTier === "FREE" ? (
-                  <span className="text-xs text-green-600">FREE</span>
+                  <span className="text-xs text-emerald-400">FREE</span>
                 ) : (
-                  <span className="text-xs text-zinc-400">🔒</span>
+                  <span className="text-xs text-zinc-600">🔒</span>
                 )}
               </div>
 
@@ -63,10 +63,10 @@ export function LessonSidebar({
                       }
                       className={`block px-3 py-2 rounded text-sm transition-colors ${
                         isCurrentLesson
-                          ? "bg-blue-100 dark:bg-blue-900 text-blue-900 dark:text-blue-100 font-medium"
+                          ? "bg-emerald-950/40 text-emerald-300 font-medium border border-emerald-800/40"
                           : isLocked
-                            ? "text-zinc-400 cursor-not-allowed"
-                            : "text-zinc-600 dark:text-zinc-400 hover:bg-zinc-100 dark:hover:bg-zinc-800"
+                            ? "text-zinc-600 cursor-not-allowed"
+                            : "text-zinc-400 hover:bg-zinc-800/50"
                       }`}
                       onClick={(e) => isLocked && e.preventDefault()}
                     >
@@ -74,9 +74,9 @@ export function LessonSidebar({
                         {isLocked ? (
                           <span>🔒</span>
                         ) : isCompleted ? (
-                          <span className="text-green-600">✓</span>
+                          <span className="text-emerald-400">✓</span>
                         ) : (
-                          <span className="text-blue-600">▶</span>
+                          <span className="text-emerald-500">▶</span>
                         )}
                         <span className="truncate">{lesson.title}</span>
                       </div>

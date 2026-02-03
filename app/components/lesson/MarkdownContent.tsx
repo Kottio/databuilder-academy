@@ -11,16 +11,15 @@ interface MarkdownContentProps {
 
 export function MarkdownContent({ content }: MarkdownContentProps) {
   return (
-    <div className="prose dark:prose-invert max-w-none">
+    <div className="prose prose-invert max-w-none prose-headings:text-zinc-100 prose-p:text-zinc-300 prose-strong:text-zinc-200 prose-li:text-zinc-300">
       <ReactMarkdown
         remarkPlugins={[remarkGfm]}
         rehypePlugins={[rehypeHighlight]}
         components={{
-          // Custom styling for code blocks
           code: ({ node, inline, className, children, ...props }: any) => {
             return inline ? (
               <code
-                className="bg-zinc-100 dark:bg-zinc-800 px-1.5 py-0.5 rounded text-sm"
+                className="bg-zinc-800 px-1.5 py-0.5 rounded text-sm text-emerald-300"
                 {...props}
               >
                 {children}
@@ -31,10 +30,9 @@ export function MarkdownContent({ content }: MarkdownContentProps) {
               </code>
             );
           },
-          // Custom styling for links
           a: ({ node, children, ...props }: any) => (
             <a
-              className="text-blue-600 dark:text-blue-400 hover:underline"
+              className="text-emerald-400 hover:text-emerald-300 hover:underline transition-colors"
               target="_blank"
               rel="noopener noreferrer"
               {...props}

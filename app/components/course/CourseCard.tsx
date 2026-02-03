@@ -3,47 +3,32 @@ import type { Course } from "@/types/course";
 
 interface CourseCardProps {
   course: Course;
-  // progress?: {
-  //   completed: number;
-  //   total: number;
-  // };
 }
 
 export function CourseCard({ course }: CourseCardProps) {
-  // const progressPercentage = progr1ess
-  //   ? (progress.completed / progress.total) * 100
-  //   : 0;
-
   return (
     <Link
       href={`/courses/${course.slug}`}
-      className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-6 hover:shadow-lg transition-shadow"
+      className="group rounded-lg border border-zinc-800/60 bg-[#161820] overflow-hidden hover:border-emerald-500/30 transition-all"
     >
-      <h3 className="text-lg font-semibold mb-2">{course.title}</h3>
-      <p className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-        {course.description}
-      </p>
+      {/* Thumbnail / Header */}
+      <div className="h-32 bg-gradient-to-br from-emerald-600/20 to-teal-600/10 flex items-center justify-center">
+        <span className="text-3xl text-emerald-400/60 group-hover:text-emerald-400/80 transition-colors">
+          &#9654;
+        </span>
+      </div>
 
-      {/* {progress && (
-        <div className="mb-2">
-          <div className="flex justify-between text-xs text-zinc-600 dark:text-zinc-400 mb-1">
-            <span>Progress</span>
-            <span>
-              {progress.completed} / {progress.total} lessons
-            </span>
-          </div>
-          <div className="h-2 bg-zinc-200 dark:bg-zinc-800 rounded-full overflow-hidden">
-            <div
-              className="h-full bg-blue-600 transition-all"
-              style={{ width: `${progressPercentage}%` }}
-            />
-          </div>
-        </div>
-      )} */}
+      {/* Content */}
+      <div className="p-5">
+        <h3 className="text-base font-semibold text-zinc-100 mb-1.5">{course.title}</h3>
+        <p className="text-sm text-zinc-500 mb-4 line-clamp-2">
+          {course.description}
+        </p>
 
-      <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
-        Continue learning →
-      </span>
+        <span className="text-xs text-emerald-400 font-medium group-hover:text-emerald-300 transition-colors">
+          Continue learning →
+        </span>
+      </div>
     </Link>
   );
 }

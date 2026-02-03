@@ -35,26 +35,26 @@ export function ModuleAccordion({
   const isLocked = !hasAccess;
 
   return (
-    <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 overflow-hidden">
+    <div className="bg-[#161820] rounded-lg border border-zinc-800/60 overflow-hidden">
       {/* Module Header */}
-      <div className="bg-zinc-50 dark:bg-zinc-800 px-6 py-4 border-b border-zinc-200 dark:border-zinc-700">
+      <div className="bg-zinc-800/40 px-6 py-4 border-b border-zinc-800/60">
         <div className="flex items-center justify-between">
           <div>
-            <h2 className="text-xl font-semibold text-zinc-900 dark:text-zinc-100">
+            <h2 className="text-xl font-semibold text-zinc-100">
               {module.title}
             </h2>
             {module.description && (
-              <p className="text-sm text-zinc-600 dark:text-zinc-400 mt-1">
+              <p className="text-sm text-zinc-500 mt-1">
                 {module.description}
               </p>
             )}
           </div>
           {module.accessTier === "FREE" ? (
-            <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="bg-emerald-950/50 text-emerald-400 text-xs font-medium px-3 py-1 rounded-full border border-emerald-800/40">
               FREE
             </span>
           ) : isLocked ? (
-            <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-medium px-3 py-1 rounded-full">
+            <span className="bg-zinc-800 text-zinc-400 text-xs font-medium px-3 py-1 rounded-full">
               🔒 LOCKED
             </span>
           ) : null}
@@ -62,7 +62,7 @@ export function ModuleAccordion({
       </div>
 
       {/* Lessons List */}
-      <div className="divide-y divide-zinc-200 dark:divide-zinc-800">
+      <div className="divide-y divide-zinc-800/60">
         {module.lessons.map((lesson) => {
           const isCompleted = completedLessonIds.includes(lesson.id);
 
@@ -72,7 +72,7 @@ export function ModuleAccordion({
               href={
                 isLocked ? "#" : `/courses/${courseSlug}/lessons/${lesson.id}`
               }
-              className={`flex items-center justify-between px-6 py-4 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors ${
+              className={`flex items-center justify-between px-6 py-4 hover:bg-zinc-800/30 transition-colors ${
                 isLocked ? "opacity-50 cursor-not-allowed" : ""
               }`}
               onClick={(e) => isLocked && e.preventDefault()}
@@ -81,26 +81,26 @@ export function ModuleAccordion({
                 {/* Status Icon */}
                 <div className="w-6 h-6 flex items-center justify-center">
                   {isLocked ? (
-                    <span className="text-zinc-400">🔒</span>
+                    <span className="text-zinc-600">🔒</span>
                   ) : isCompleted ? (
-                    <span className="text-green-600">✓</span>
+                    <span className="text-emerald-400">✓</span>
                   ) : (
-                    <span className="text-blue-600">▶</span>
+                    <span className="text-emerald-500">▶</span>
                   )}
                 </div>
 
                 <div>
-                  <h3 className="font-medium text-zinc-900 dark:text-zinc-100">
+                  <h3 className="font-medium text-zinc-200">
                     {lesson.title}
                   </h3>
-                  <p className="text-sm text-zinc-500 dark:text-zinc-400">
+                  <p className="text-sm text-zinc-500">
                     {lesson.duration} min
                   </p>
                 </div>
               </div>
 
               {!isLocked && (
-                <span className="text-sm text-blue-600 dark:text-blue-400">
+                <span className="text-sm text-emerald-400">
                   →
                 </span>
               )}
