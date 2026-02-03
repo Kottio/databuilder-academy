@@ -16,3 +16,15 @@ export function canAccessModule(
 
   return false;
 }
+
+/**
+ * Split modules into accessible and locked based on user access type
+ */
+export function splitModulesByAccess<T extends { accessTier: string }>(
+  modules: T[],
+  userAccessType: string,
+): { accessible: T[]; locked: T[] } {
+  const accessible = modules.filter((m) => canAccessModule(userAccessType, m.accessTier));
+  const locked = modules.filter((m) => !canAccessModule(userAccessType, m.accessTier));
+  return { accessible, locked };
+}

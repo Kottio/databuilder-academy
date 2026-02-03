@@ -4,10 +4,15 @@ import useSWR from "swr";
 import { useSession } from "@/app/lib/auth-client";
 import { CourseCard } from "@/app/components/course/CourseCard";
 import { fetcher } from "@/app/lib/fetcher";
+import type { Course } from "@/types/course";
 
 export default function DashboardPage() {
   const { data: session } = useSession();
-  const { data, isLoading, error: isError } = useSWR("/api/me/courses", fetcher);
+  const {
+    data,
+    isLoading,
+    error: isError,
+  } = useSWR<{ courses: Course[] }>("/api/me/courses", fetcher);
   const courses = data?.courses;
 
   return (
@@ -18,19 +23,21 @@ export default function DashboardPage() {
           <h1 className="text-3xl font-bold text-white">
             Welcome back, {session?.user.name || "Student"}
           </h1>
-          <p className="text-zinc-400 mt-2">
-            Continue your learning journey
-          </p>
+          <p className="text-zinc-400 mt-2">Continue your learning journey</p>
         </div>
       </div>
 
       {/* Course Content */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-10">
         <section>
-          <h2 className="text-lg font-semibold text-zinc-200 mb-6">Your Courses</h2>
+          <h2 className="text-lg font-semibold text-zinc-200 mb-6">
+            Your Courses
+          </h2>
 
           {isLoading && <div className="text-zinc-500">Loading courses...</div>}
-          {isError && <div className="text-red-400">Failed to load courses</div>}
+          {isError && (
+            <div className="text-red-400">Failed to load courses</div>
+          )}
 
           {courses && courses.length > 0 && (
             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">

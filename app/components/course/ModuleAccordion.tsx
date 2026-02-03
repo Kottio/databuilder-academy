@@ -23,6 +23,7 @@ interface ModuleAccordionProps {
   courseSlug: string;
   userAccessType: string;
   completedLessonIds?: string[];
+  onUnlockClick?: () => void;
 }
 
 export function ModuleAccordion({
@@ -30,6 +31,7 @@ export function ModuleAccordion({
   courseSlug,
   userAccessType,
   completedLessonIds = [],
+  onUnlockClick,
 }: ModuleAccordionProps) {
   const hasAccess = canAccessModule(userAccessType, module.accessTier);
   const isLocked = !hasAccess;
@@ -49,15 +51,27 @@ export function ModuleAccordion({
               </p>
             )}
           </div>
-          {module.accessTier === "FREE" ? (
-            <span className="bg-emerald-950/50 text-emerald-400 text-xs font-medium px-3 py-1 rounded-full border border-emerald-800/40">
-              FREE
-            </span>
-          ) : isLocked ? (
-            <span className="bg-zinc-800 text-zinc-400 text-xs font-medium px-3 py-1 rounded-full">
-              🔒 LOCKED
-            </span>
-          ) : null}
+
+          <div className="flex items-center gap-3">
+            {module.accessTier === "FREE" ? (
+              <span className="bg-emerald-950/50 text-emerald-400 text-xs font-medium px-3 py-1 rounded-full border border-emerald-800/40">
+                FREE
+              </span>
+            ) : isLocked ? (
+              <>
+                {/* (3) Mini-CTA on locked module header */}
+                <button
+                  onClick={onUnlockClick}
+                  className="text-xs font-medium text-emerald-400 hover:text-emerald-300 border border-emerald-800/40 hover:border-emerald-600/60 px-3 py-1 rounded-full transition-colors"
+                >
+                  Unlock
+                </button>
+                <span className="bg-zinc-800 text-zinc-400 text-xs font-medium px-3 py-1 rounded-full">
+                  🔒
+                </span>
+              </>
+            ) : null}
+          </div>
         </div>
       </div>
 
