@@ -10,7 +10,7 @@ interface CourseCardProps {
 }
 
 export function CourseCard({ course }: CourseCardProps) {
-  // const progressPercentage = progress
+  // const progressPercentage = progr1ess
   //   ? (progress.completed / progress.total) * 100
   //   : 0;
 

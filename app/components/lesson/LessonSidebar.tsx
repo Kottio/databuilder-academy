@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { CoursePageResponse } from "@/types/course";
+import { canAccessModule } from "@/app/lib/access";
 
 interface LessonSidebarProps {
   course: CoursePageResponse;
@@ -10,13 +11,11 @@ export function LessonSidebar({
   course,
   currentLessonId,
 }: LessonSidebarProps) {
-  const isEnrolled = course.accessType === "PAID";
-
-  // Extract completed lesson IDs from course data
   const completedLessonIds = course.course.modules
     .flatMap((m) => m.lessons)
     .filter((l) => l.progress?.completed)
     .map((l) => l.id);
+
   return (
     <div className="p-4 pt-20">
       <Link
@@ -30,7 +29,11 @@ export function LessonSidebar({
 
       <div className="space-y-4">
         {course.course.modules.map((module) => {
-          const isLocked = module.accessTier === "PAID" && !isEnrolled;
+          const hasAccess = canAccessModule(
+            course.accessType,
+            module.accessTier,
+          );
+          const isLocked = !hasAccess;
 
           return (
             <div key={module.id}>

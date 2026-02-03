@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { canAccessModule } from "@/app/lib/access";
 
 interface ModuleAccordionProps {
   module: {
@@ -20,17 +21,18 @@ interface ModuleAccordionProps {
     }>;
   };
   courseSlug: string;
-  hasPaid: boolean;
+  userAccessType: string;
   completedLessonIds?: string[];
 }
 
 export function ModuleAccordion({
   module,
   courseSlug,
-  hasPaid,
+  userAccessType,
   completedLessonIds = [],
 }: ModuleAccordionProps) {
-  const isLocked = module.accessTier !== "FREE" && !hasPaid;
+  const hasAccess = canAccessModule(userAccessType, module.accessTier);
+  const isLocked = !hasAccess;
 
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 overflow-hidden">
@@ -47,15 +49,15 @@ export function ModuleAccordion({
               </p>
             )}
           </div>
-          {!isLocked ? (
+          {module.accessTier === "FREE" ? (
             <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 text-xs font-medium px-3 py-1 rounded-full">
               FREE
             </span>
-          ) : (
+          ) : isLocked ? (
             <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-medium px-3 py-1 rounded-full">
               🔒 LOCKED
             </span>
-          )}
+          ) : null}
         </div>
       </div>
 

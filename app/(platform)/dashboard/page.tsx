@@ -1,37 +1,14 @@
 "use client";
 
+import useSWR from "swr";
 import { useSession } from "@/app/lib/auth-client";
-import { useEffect, useState } from "react";
 import { CourseCard } from "@/app/components/course/CourseCard";
-// import { courses } from "@/app/data/courses";
-// import Link from "next/link";
-import { Course } from "@/types/course";
+import { fetcher } from "@/app/lib/fetcher";
+
 export default function DashboardPage() {
   const { data: session } = useSession();
-
-  const [courses, setCourses] = useState<Course[]>([]);
-  // TODO : Check Authentication
-
-  // const totalLessons = courses[0].modules.reduce(
-  //   (acc, m) => acc + m.lessons.length,
-  //   0,
-  // );
-  // const completedLessons = 2; // Mock: user has completed 2 lessons
-
-  useEffect(() => {
-    //Improve error handling and loading
-    const fetchCourses = async () => {
-      const response = await fetch('/api/me/courses');
-      if (response.ok) {
-        const data = await response.json();
-        setCourses(data.courses);
-      }
-    };
-
-    if (session) {
-      fetchCourses();
-    }
-  }, [session]);
+  const { data, isLoading, error: isError } = useSWR("/api/me/courses", fetcher);
+  const courses = data?.courses;
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-12">
@@ -44,22 +21,25 @@ export default function DashboardPage() {
         </p>
       </div>
 
-      {/* Enrolled Courses Section */}
       <section className="mb-12">
         <h2 className="text-xl font-semibold mb-4">Your Courses</h2>
 
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-          {courses.map((course) => (
-            <CourseCard
-              key={course.id}
-              course={course}
-              // progress={{
-              //   completed: completedLessons,
-              //   total: totalLessons,
-              // }}
-            />
-          ))}
-        </div>
+        {isLoading && <div>Loading courses...</div>}
+        {isError && <div>Failed to load courses</div>}
+
+        {courses && courses.length > 0 && (
+          <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+            {courses.map((course) => (
+              <CourseCard key={course.id} course={course} />
+            ))}
+          </div>
+        )}
+
+        {courses && courses.length === 0 && (
+          <div className="text-zinc-600 dark:text-zinc-400">
+            No courses yet. Check back soon!
+          </div>
+        )}
       </section>
 
       {/* Continue Where You Left Off */}

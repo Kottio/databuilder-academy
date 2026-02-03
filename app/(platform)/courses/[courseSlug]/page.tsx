@@ -1,17 +1,21 @@
 "use client";
 
+import useSWR from "swr";
 import Link from "next/link";
 import { useParams } from "next/navigation";
 import { ModuleAccordion } from "@/app/components/course/ModuleAccordion";
-import { useCourse } from "@/app/hooks/useCourse";
-import { Module } from "@/types/course";
+import { fetcher } from "@/app/lib/fetcher";
+import { calculateCourseProgress } from "@/app/lib/progress";
+import type { CoursePageResponse } from "@/types/course";
 
 export default function CourseOverviewPage() {
   const params = useParams();
   const courseSlug = params.courseSlug as string;
 
-  const { data, isLoading, isError } = useCourse(courseSlug);
-  console.log(data);
+  const { data, isLoading, error: isError } = useSWR<CoursePageResponse>(
+    `/api/me/courses/${courseSlug}`,
+    fetcher,
+  );
 
   if (isLoading) {
     return <div className="mx-auto max-w-5xl px-4 py-12">Loading...</div>;
@@ -21,24 +25,14 @@ export default function CourseOverviewPage() {
     return <div className="mx-auto max-w-5xl px-4 py-12">Course not found</div>;
   }
 
-  // Extract from API response
   const { course, accessType } = data;
-  console.log(course);
 
-  const hasPaid = accessType === "PAID";
-
-  const completedLessonIds = course.modules
-    .flatMap((m) => m.lessons)
-    .filter((l) => l.progress?.completed)
-    .map((l) => l.id);
-
-  const totalLessons = course.modules.reduce(
-    (acc, m) => acc + m.lessons.length,
-    0,
-  );
-  const completedLessons = completedLessonIds.length;
-  const progressPercentage =
-    totalLessons > 0 ? (completedLessons / totalLessons) * 100 : 0;
+  const {
+    completedLessonIds,
+    totalLessons,
+    completedLessons,
+    progressPercentage,
+  } = calculateCourseProgress(course.modules);
 
   return (
     <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
@@ -76,7 +70,7 @@ export default function CourseOverviewPage() {
         </div>
 
         {/* Enrollment Status */}
-        {!hasPaid && (
+        {accessType !== "PAID" && (
           <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
             <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
               <strong>Module 1 is free!</strong> Upgrade to access all modules
@@ -95,7 +89,7 @@ export default function CourseOverviewPage() {
             key={module.id}
             module={module}
             courseSlug={courseSlug}
-            hasPaid={hasPaid}
+            userAccessType={accessType}
             completedLessonIds={completedLessonIds}
           />
         ))}

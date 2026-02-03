@@ -1,11 +1,12 @@
 "use client";
 
+import useSWR from "swr";
 import { useParams } from "next/navigation";
 import { useState } from "react";
 import { LessonSidebar } from "@/app/components/lesson/LessonSidebar";
 import { MarkdownContent } from "@/app/components/lesson/MarkdownContent";
-import { useCourse } from "@/app/hooks/useCourse";
-import { useLesson } from "@/app/hooks/useLesson";
+import { fetcher } from "@/app/lib/fetcher";
+import type { CoursePageResponse, LessonPageResponse } from "@/types/course";
 
 export default function LessonViewerPage() {
   const params = useParams();
@@ -18,13 +19,14 @@ export default function LessonViewerPage() {
   const {
     data: courseData,
     isLoading: courseLoading,
-    isError: courseError,
-  } = useCourse(courseSlug);
+    error: courseError,
+  } = useSWR<CoursePageResponse>(`/api/me/courses/${courseSlug}`, fetcher);
+
   const {
     data: lessonData,
     isLoading: lessonLoading,
-    isError: lessonError,
-  } = useLesson(lessonId);
+    error: lessonError,
+  } = useSWR<LessonPageResponse>(`/api/me/lessons/${lessonId}`, fetcher);
 
   if (courseLoading || lessonLoading) {
     return <div className="p-8">Loading...</div>;
