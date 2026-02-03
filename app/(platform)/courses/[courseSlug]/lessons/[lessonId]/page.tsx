@@ -2,9 +2,10 @@
 
 import { useParams } from "next/navigation";
 import { useState } from "react";
-import { getLessonById } from "@/app/data/courses";
 import { LessonSidebar } from "@/app/components/lesson/LessonSidebar";
 import { MarkdownContent } from "@/app/components/lesson/MarkdownContent";
+import { useCourse } from "@/app/hooks/useCourse";
+import { useLesson } from "@/app/hooks/useLesson";
 
 export default function LessonViewerPage() {
   const params = useParams();
@@ -14,22 +15,26 @@ export default function LessonViewerPage() {
   const [sidebarOpen, setSidebarOpen] = useState(true);
   const [completed, setCompleted] = useState(false);
 
-  // Get lesson data
-  const lessonData = getLessonById(lessonId);
+  const {
+    data: courseData,
+    isLoading: courseLoading,
+    isError: courseError,
+  } = useCourse(courseSlug);
+  const {
+    data: lessonData,
+    isLoading: lessonLoading,
+    isError: lessonError,
+  } = useLesson(lessonId);
 
-  if (!lessonData) {
-    return (
-      <div className="flex h-[calc(100vh-4rem)] items-center justify-center">
-        <p>Lesson not found</p>
-      </div>
-    );
+  if (courseLoading || lessonLoading) {
+    return <div className="p-8">Loading...</div>;
   }
 
-  const { course, module, lesson } = lessonData;
+  if (courseError || lessonError || !courseData || !lessonData) {
+    return <div className="p-8">Error loading lesson</div>;
+  }
 
-  // TODO: Get from database
-  const completedLessonIds = ["lesson-1", "lesson-2"];
-  const isEnrolled = false;
+  const { lesson } = lessonData;
 
   const handleMarkComplete = () => {
     setCompleted(!completed);
@@ -45,13 +50,7 @@ export default function LessonViewerPage() {
         } border-r border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-y-auto transition-all`}
       >
         {sidebarOpen && (
-          <LessonSidebar
-            courseSlug={courseSlug}
-            modules={course.modules}
-            currentLessonId={lessonId}
-            isEnrolled={isEnrolled}
-            completedLessonIds={completedLessonIds}
-          />
+          <LessonSidebar course={courseData} currentLessonId={lessonId} />
         )}
       </aside>
 
@@ -60,7 +59,7 @@ export default function LessonViewerPage() {
         <div className="max-w-4xl mx-auto p-8">
           {/* Breadcrumb */}
           <div className="text-sm text-zinc-600 dark:text-zinc-400 mb-4">
-            {module.title} / {lesson.title}
+            {lesson.module.title} / {lesson.title}
           </div>
 
           {/* Lesson Title */}
@@ -109,7 +108,7 @@ export default function LessonViewerPage() {
           {lesson.resources && lesson.resources.length > 0 && (
             <div className="bg-zinc-50 dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 p-6">
               <h2 className="text-lg font-semibold mb-4">Resources</h2>
-              <div className="space-y-3">
+              {/* <div className="space-y-3">
                 {lesson.resources.map((resource) => (
                   <a
                     key={resource.id}
@@ -137,7 +136,7 @@ export default function LessonViewerPage() {
                     </div>
                   </a>
                 ))}
-              </div>
+              </div> */}
             </div>
           )}
         </div>

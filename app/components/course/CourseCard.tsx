@@ -3,16 +3,16 @@ import type { Course } from "@/types/course";
 
 interface CourseCardProps {
   course: Course;
-  progress?: {
-    completed: number;
-    total: number;
-  };
+  // progress?: {
+  //   completed: number;
+  //   total: number;
+  // };
 }
 
-export function CourseCard({ course, progress }: CourseCardProps) {
-  const progressPercentage = progress
-    ? (progress.completed / progress.total) * 100
-    : 0;
+export function CourseCard({ course }: CourseCardProps) {
+  // const progressPercentage = progress
+  //   ? (progress.completed / progress.total) * 100
+  //   : 0;
 
   return (
     <Link
@@ -24,7 +24,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
         {course.description}
       </p>
 
-      {progress && (
+      {/* {progress && (
         <div className="mb-2">
           <div className="flex justify-between text-xs text-zinc-600 dark:text-zinc-400 mb-1">
             <span>Progress</span>
@@ -39,7 +39,7 @@ export function CourseCard({ course, progress }: CourseCardProps) {
             />
           </div>
         </div>
-      )}
+      )} */}
 
       <span className="text-xs text-blue-600 dark:text-blue-400 font-medium">
         Continue learning →

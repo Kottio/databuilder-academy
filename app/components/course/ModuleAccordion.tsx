@@ -1,20 +1,36 @@
 import Link from "next/link";
-import type { ModuleWithLessons } from "@/types/course";
 
 interface ModuleAccordionProps {
-  module: ModuleWithLessons;
+  module: {
+    id: string;
+    title: string;
+    description: string | null;
+    order: number;
+    accessTier: string;
+    lessons: Array<{
+      id: string;
+      title: string;
+      duration: number;
+      order: number;
+      progress: {
+        completed: boolean;
+        lastWatched: number;
+        completedAt: string | null;
+      } | null;
+    }>;
+  };
   courseSlug: string;
-  isEnrolled: boolean;
+  hasPaid: boolean;
   completedLessonIds?: string[];
 }
 
 export function ModuleAccordion({
   module,
   courseSlug,
-  isEnrolled,
+  hasPaid,
   completedLessonIds = [],
 }: ModuleAccordionProps) {
-  const isLocked = !module.isFree && !isEnrolled;
+  const isLocked = module.accessTier !== "FREE" && !hasPaid;
 
   return (
     <div className="bg-white dark:bg-zinc-900 rounded-lg border border-zinc-200 dark:border-zinc-800 overflow-hidden">
@@ -31,15 +47,15 @@ export function ModuleAccordion({
               </p>
             )}
           </div>
-          {module.isFree ? (
+          {!isLocked ? (
             <span className="bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-100 text-xs font-medium px-3 py-1 rounded-full">
               FREE
             </span>
-          ) : !isEnrolled ? (
+          ) : (
             <span className="bg-zinc-200 dark:bg-zinc-700 text-zinc-700 dark:text-zinc-300 text-xs font-medium px-3 py-1 rounded-full">
               🔒 LOCKED
             </span>
-          ) : null}
+          )}
         </div>
       </div>
 

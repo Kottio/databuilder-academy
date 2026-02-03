@@ -2,31 +2,39 @@
 
 import Link from "next/link";
 import { useParams } from "next/navigation";
-import { getCourseBySlug } from "@/app/data/courses";
 import { ModuleAccordion } from "@/app/components/course/ModuleAccordion";
+import { useCourse } from "@/app/hooks/useCourse";
+import { Module } from "@/types/course";
 
 export default function CourseOverviewPage() {
   const params = useParams();
   const courseSlug = params.courseSlug as string;
 
-  // Get course data
-  const course = getCourseBySlug(courseSlug);
+  const { data, isLoading, isError } = useCourse(courseSlug);
+  console.log(data);
 
-  if (!course) {
-    return (
-      <div className="mx-auto max-w-5xl px-4 sm:px-6 lg:px-8 py-12">
-        <p>Course not found</p>
-      </div>
-    );
+  if (isLoading) {
+    return <div className="mx-auto max-w-5xl px-4 py-12">Loading...</div>;
   }
 
-  // TODO: Get from database - mock data for now
-  const completedLessonIds = ["lesson-1", "lesson-2"]; // Mock: user completed these lessons
-  const isEnrolled = false; // Mock: user not enrolled
+  if (isError || !data) {
+    return <div className="mx-auto max-w-5xl px-4 py-12">Course not found</div>;
+  }
+
+  // Extract from API response
+  const { course, accessType } = data;
+  console.log(course);
+
+  const hasPaid = accessType === "PAID";
+
+  const completedLessonIds = course.modules
+    .flatMap((m) => m.lessons)
+    .filter((l) => l.progress?.completed)
+    .map((l) => l.id);
 
   const totalLessons = course.modules.reduce(
     (acc, m) => acc + m.lessons.length,
-    0
+    0,
   );
   const completedLessons = completedLessonIds.length;
   const progressPercentage =
@@ -68,7 +76,7 @@ export default function CourseOverviewPage() {
         </div>
 
         {/* Enrollment Status */}
-        {!isEnrolled && (
+        {!hasPaid && (
           <div className="bg-blue-50 dark:bg-blue-950 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
             <p className="text-sm text-blue-900 dark:text-blue-100 mb-2">
               <strong>Module 1 is free!</strong> Upgrade to access all modules
@@ -87,7 +95,7 @@ export default function CourseOverviewPage() {
             key={module.id}
             module={module}
             courseSlug={courseSlug}
-            isEnrolled={isEnrolled}
+            hasPaid={hasPaid}
             completedLessonIds={completedLessonIds}
           />
         ))}

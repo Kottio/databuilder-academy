@@ -6,6 +6,66 @@
  * Course - Top level entity
  * Represents a complete course (e.g., "Full Stack Data Builder Academy")
  */
+
+export interface CoursePageResponse {
+  course: {
+    id: string;
+    title: string;
+    slug: string;
+    description: string;
+    price: number;
+    modules: Array<{
+      id: string;
+      title: string;
+      description: string | null;
+      order: number;
+      accessTier: string;
+      lessons: Array<{
+        id: string;
+        title: string;
+        duration: number;
+        order: number;
+        progress: {
+          completed: boolean;
+          lastWatched: number;
+          completedAt: string | null;
+        } | null;
+      }>;
+    }>;
+  };
+  accessType: string;
+  status: string;
+}
+
+export interface LessonPageResponse {
+  lesson: {
+    id: string;
+    title: string;
+    videoUrl: string;
+    content: string;
+    duration: number;
+    order: number;
+    resources: any;
+    progress: {
+      completed: boolean;
+      lastWatched: number;
+      completedAt: string | null;
+    } | null;
+    module: {
+      id: string;
+      title: string;
+      accessTier: string;
+    };
+    course: {
+      id: string;
+      title: string;
+      slug: string;
+    };
+  };
+  hasAccess: boolean;
+  accessType: string;
+}
+
 export interface Course {
   id: string;
   title: string;
@@ -26,7 +86,7 @@ export interface Course {
  * - 'paid': Requires base course payment
  * - 'extension': Separate paid extension (future feature)
  */
-export type ModuleAccessType = 'free' | 'paid' | 'extension';
+export type ModuleAccessType = "free" | "paid" | "extension";
 
 /**
  * Module - Mid-level entity
@@ -70,7 +130,7 @@ export interface Lesson {
 export interface LessonResource {
   id: string;
   title: string;
-  type: 'download' | 'link' | 'github' | 'code';
+  type: "download" | "link" | "github" | "code";
   url: string;
   description?: string;
 }
@@ -97,7 +157,7 @@ export interface Enrollment {
   id: string;
   userId: string;
   courseId: string;
-  status: 'active' | 'completed' | 'cancelled';
+  status: "active" | "completed" | "cancelled";
   // Future: extensionModules?: string[]; // Array of module IDs with extended access
   createdAt: Date;
   updatedAt: Date;
@@ -146,13 +206,16 @@ export interface CourseWithProgress extends Course {
 /**
  * Minimal course info for listings
  */
-export type CourseCard = Pick<Course, 'id' | 'title' | 'slug' | 'description' | 'thumbnailUrl' | 'price' | 'isFree'>;
+export type CourseCard = Pick<
+  Course,
+  "id" | "title" | "slug" | "description" | "thumbnailUrl" | "price" | "isFree"
+>;
 
 /**
  * Navigation item for course sidebar
  */
 export interface CourseNavigation {
-  course: Pick<Course, 'id' | 'title' | 'slug'>;
+  course: Pick<Course, "id" | "title" | "slug">;
   modules: Array<{
     id: string;
     title: string;

@@ -1,25 +1,26 @@
 import Link from "next/link";
-import type { ModuleWithLessons } from "@/types/course";
+import type { CoursePageResponse } from "@/types/course";
 
 interface LessonSidebarProps {
-  courseSlug: string;
-  modules: ModuleWithLessons[];
+  course: CoursePageResponse;
   currentLessonId: string;
-  isEnrolled: boolean;
-  completedLessonIds?: string[];
 }
 
 export function LessonSidebar({
-  courseSlug,
-  modules,
+  course,
   currentLessonId,
-  isEnrolled,
-  completedLessonIds = [],
 }: LessonSidebarProps) {
+  const isEnrolled = course.accessType === "PAID";
+
+  // Extract completed lesson IDs from course data
+  const completedLessonIds = course.course.modules
+    .flatMap((m) => m.lessons)
+    .filter((l) => l.progress?.completed)
+    .map((l) => l.id);
   return (
     <div className="p-4 pt-20">
       <Link
-        href={`/courses/${courseSlug}`}
+        href={`/courses/${course.course.slug}`}
         className="text-sm text-blue-600 hover:text-blue-700 mb-4 inline-block"
       >
         ← Course Overview
@@ -28,8 +29,8 @@ export function LessonSidebar({
       <h2 className="font-semibold text-lg mb-4">Course Content</h2>
 
       <div className="space-y-4">
-        {modules.map((module) => {
-          const isLocked = !module.isFree && !isEnrolled;
+        {course.course.modules.map((module) => {
+          const isLocked = module.accessTier === "PAID" && !isEnrolled;
 
           return (
             <div key={module.id}>
@@ -37,7 +38,7 @@ export function LessonSidebar({
                 <h3 className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                   {module.title}
                 </h3>
-                {module.isFree ? (
+                {module.accessTier === "FREE" ? (
                   <span className="text-xs text-green-600">FREE</span>
                 ) : (
                   <span className="text-xs text-zinc-400">🔒</span>
@@ -55,7 +56,7 @@ export function LessonSidebar({
                       href={
                         isLocked
                           ? "#"
-                          : `/courses/${courseSlug}/lessons/${lesson.id}`
+                          : `/courses/${course.course.slug}/lessons/${lesson.id}`
                       }
                       className={`block px-3 py-2 rounded text-sm transition-colors ${
                         isCurrentLesson
