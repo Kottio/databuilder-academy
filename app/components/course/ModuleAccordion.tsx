@@ -1,41 +1,19 @@
 import Link from "next/link";
-import { canAccessModule } from "@/app/lib/access";
+import type { Module } from "@/types/course";
 
 interface ModuleAccordionProps {
-  module: {
-    id: string;
-    title: string;
-    description: string | null;
-    order: number;
-    accessTier: string;
-    lessons: Array<{
-      id: string;
-      title: string;
-      duration: number;
-      order: number;
-      progress: {
-        completed: boolean;
-        lastWatched: number;
-        completedAt: string | null;
-      } | null;
-    }>;
-  };
+  module: Module;
   courseSlug: string;
-  userAccessType: string;
-  completedLessonIds?: string[];
+  isLocked: boolean;
   onUnlockClick?: () => void;
 }
 
 export function ModuleAccordion({
   module,
   courseSlug,
-  userAccessType,
-  completedLessonIds = [],
+  isLocked,
   onUnlockClick,
 }: ModuleAccordionProps) {
-  const hasAccess = canAccessModule(userAccessType, module.accessTier);
-  const isLocked = !hasAccess;
-
   return (
     <div className="bg-[#161820] rounded-lg border border-zinc-800/60 overflow-hidden">
       {/* Module Header */}
@@ -46,9 +24,7 @@ export function ModuleAccordion({
               {module.title}
             </h2>
             {module.description && (
-              <p className="text-sm text-zinc-500 mt-1">
-                {module.description}
-              </p>
+              <p className="text-sm text-zinc-500 mt-1">{module.description}</p>
             )}
           </div>
 
@@ -78,7 +54,7 @@ export function ModuleAccordion({
       {/* Lessons List */}
       <div className="divide-y divide-zinc-800/60">
         {module.lessons.map((lesson) => {
-          const isCompleted = completedLessonIds.includes(lesson.id);
+          const isCompleted = lesson.progress?.completed || false;
 
           return (
             <Link
@@ -104,20 +80,12 @@ export function ModuleAccordion({
                 </div>
 
                 <div>
-                  <h3 className="font-medium text-zinc-200">
-                    {lesson.title}
-                  </h3>
-                  <p className="text-sm text-zinc-500">
-                    {lesson.duration} min
-                  </p>
+                  <h3 className="font-medium text-zinc-200">{lesson.title}</h3>
+                  <p className="text-sm text-zinc-500">{lesson.duration} min</p>
                 </div>
               </div>
 
-              {!isLocked && (
-                <span className="text-sm text-emerald-400">
-                  →
-                </span>
-              )}
+              {!isLocked && <span className="text-sm text-emerald-400">→</span>}
             </Link>
           );
         })}

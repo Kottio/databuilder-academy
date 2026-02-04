@@ -1,7 +1,3 @@
-// ============================================
-// API RESPONSE TYPES
-// ============================================
-
 export interface Course {
   id: string;
   title: string;
@@ -51,6 +47,26 @@ export interface Lesson {
     completedAt: string | null;
   } | null;
 }
+
+export interface Module {
+  id: string;
+  title: string;
+  description: string | null;
+  order: number;
+  accessTier: string;
+  lessons: Array<{
+    id: string;
+    title: string;
+    duration: number;
+    order: number;
+    progress: {
+      completed: boolean;
+      lastWatched: number;
+      completedAt: string | null;
+    } | null;
+  }>;
+}
+
 export interface LessonPageResponse {
   lesson: {
     id: string;

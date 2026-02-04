@@ -3,7 +3,9 @@
 import useSWR from "swr";
 import { useParams } from "next/navigation";
 import { useState } from "react";
+import { PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { LessonSidebar } from "@/app/components/lesson/LessonSidebar";
+import { LessonSkeleton } from "@/app/components/lesson/LessonSkeleton";
 import { MarkdownContent } from "@/app/components/lesson/MarkdownContent";
 import { fetcher } from "@/app/lib/fetcher";
 import { getLessonNavigation } from "@/app/lib/lesson";
@@ -33,7 +35,7 @@ export default function LessonViewerPage() {
   } = useSWR<LessonPageResponse>(`/api/me/lessons/${lessonId}`, fetcher);
 
   if (courseLoading || lessonLoading) {
-    return <div className="p-8 text-zinc-400">Loading...</div>;
+    return <LessonSkeleton />;
   }
 
   // TODO: If in the page where No paid access got To CTA.
@@ -123,7 +125,11 @@ export default function LessonViewerPage() {
         onClick={() => setSidebarOpen(!sidebarOpen)}
         className="fixed top-20 left-4 z-10 bg-[#161820] border border-zinc-800/60 rounded-lg p-2 shadow-lg hover:bg-zinc-800 transition-colors"
       >
-        <span className="text-lg text-zinc-400">{sidebarOpen ? "◀" : "▶"}</span>
+        {sidebarOpen ? (
+          <PanelLeftClose size={18} className="text-zinc-400" />
+        ) : (
+          <PanelLeftOpen size={18} className="text-zinc-400" />
+        )}
       </button>
     </div>
   );

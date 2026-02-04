@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { ChevronLeft, ChevronRight } from "lucide-react";
 import type { Lesson } from "@/types/course";
 
 interface lessonActionProps {
@@ -30,27 +32,31 @@ export function LessonActions({
 
       <div className="flex gap-3">
         {previous ? (
-          <a
+          <Link
             href={`/courses/${courseSlug}/lessons/${previous.id}`}
-            className="px-4 py-2 border border-zinc-700 rounded hover:bg-zinc-800 text-sm font-medium text-zinc-300 transition-colors"
+            className="flex items-center gap-1 px-4 py-2 border border-zinc-700 rounded hover:bg-zinc-800 text-sm font-medium text-zinc-300 transition-colors"
           >
-            ← Previous
-          </a>
+            <ChevronLeft size={16} />
+            Previous
+          </Link>
         ) : (
-          <span className="px-4 py-2 border border-zinc-800 rounded text-sm font-medium text-zinc-600 cursor-not-allowed">
-            ← Previous
+          <span className="flex items-center gap-1 px-4 py-2 border border-zinc-800 rounded text-sm font-medium text-zinc-600 cursor-not-allowed">
+            <ChevronLeft size={16} />
+            Previous
           </span>
         )}
         {next ? (
-          <a
+          <Link
             href={`/courses/${courseSlug}/lessons/${next.id}`}
-            className="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-sm font-medium transition-colors"
+            className="flex items-center gap-1 px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white rounded text-sm font-medium transition-colors"
           >
-            Next Lesson →
-          </a>
+            Next Lesson
+            <ChevronRight size={16} />
+          </Link>
         ) : (
-          <span className="px-4 py-2 bg-zinc-800 rounded text-sm font-medium text-zinc-500 cursor-not-allowed">
-            Next Lesson →
+          <span className="flex items-center gap-1 px-4 py-2 bg-zinc-800 rounded text-sm font-medium text-zinc-500 cursor-not-allowed">
+            Next Lesson
+            <ChevronRight size={16} />
           </span>
         )}
       </div>

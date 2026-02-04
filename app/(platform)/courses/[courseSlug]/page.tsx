@@ -7,24 +7,32 @@ import { UpgradeCard } from "@/app/components/course/UpgradeCard";
 import { ModuleAccordion } from "@/app/components/course/ModuleAccordion";
 import { fetcher } from "@/app/lib/fetcher";
 import { splitModulesByAccess } from "@/app/lib/access";
-import { calculateCourseProgress } from "@/app/lib/progress";
 import type { CoursePageResponse } from "@/types/course";
 
 export default function CourseOverviewPage() {
   const params = useParams();
   const courseSlug = params.courseSlug as string;
 
-  const { data, isLoading, error: isError } = useSWR<CoursePageResponse>(
-    `/api/me/courses/${courseSlug}`,
-    fetcher,
-  );
+  const {
+    data,
+    isLoading,
+    error: isError,
+  } = useSWR<CoursePageResponse>(`/api/me/courses/${courseSlug}`, fetcher);
 
   if (isLoading) {
-    return <div className="mx-auto max-w-5xl px-4 py-12 text-zinc-400">Loading...</div>;
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-12 text-zinc-400">
+        Loading...
+      </div>
+    );
   }
 
   if (isError || !data) {
-    return <div className="mx-auto max-w-5xl px-4 py-12 text-red-400">Course not found</div>;
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-12 text-red-400">
+        Course not found
+      </div>
+    );
   }
 
   const { course, accessType } = data;
@@ -33,10 +41,10 @@ export default function CourseOverviewPage() {
   const { accessible: accessibleModules, locked: lockedModules } =
     splitModulesByAccess(course.modules, accessType);
 
-  const { completedLessonIds } = calculateCourseProgress(accessibleModules);
-
   const scrollToUpgrade = () => {
-    document.getElementById("upgrade-card")?.scrollIntoView({ behavior: "smooth" });
+    document
+      .getElementById("upgrade-card")
+      ?.scrollIntoView({ behavior: "smooth" });
   };
 
   return (
@@ -54,8 +62,7 @@ export default function CourseOverviewPage() {
             key={module.id}
             module={module}
             courseSlug={courseSlug}
-            userAccessType={accessType}
-            completedLessonIds={completedLessonIds}
+            isLocked={false}
           />
         ))}
       </div>
@@ -72,8 +79,7 @@ export default function CourseOverviewPage() {
               key={module.id}
               module={module}
               courseSlug={courseSlug}
-              userAccessType={accessType}
-              completedLessonIds={completedLessonIds}
+              isLocked={true}
               onUnlockClick={scrollToUpgrade}
             />
           ))}
