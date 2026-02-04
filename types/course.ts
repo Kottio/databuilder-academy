@@ -40,7 +40,17 @@ export interface CoursePageResponse {
   accessType: string;
   status: string;
 }
-
+export interface Lesson {
+  id: string;
+  title: string;
+  duration: number;
+  order: number;
+  progress: {
+    completed: boolean;
+    lastWatched: number;
+    completedAt: string | null;
+  } | null;
+}
 export interface LessonPageResponse {
   lesson: {
     id: string;

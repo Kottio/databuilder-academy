@@ -21,7 +21,7 @@ export const auth = betterAuth({
                 data: { userId: user.id },
               });
 
-              // Find the first published course
+              // Find the first published course Here Have a different set up later
               const course = await tx.course.findFirst({
                 where: { published: true },
               });

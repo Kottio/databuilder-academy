@@ -1,6 +1,5 @@
 import type { CoursePageResponse } from "@/types/course";
-
-type Lesson = CoursePageResponse["course"]["modules"][number]["lessons"][number];
+import type { Lesson } from "@/types/course";
 
 interface LessonNavigation {
   previous: Lesson | null;
