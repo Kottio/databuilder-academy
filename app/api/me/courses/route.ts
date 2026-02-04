@@ -9,10 +9,7 @@ export async function GET(request: Request) {
   });
 
   if (!session) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
 
   const userId = session.user.id;
@@ -22,21 +19,30 @@ export async function GET(request: Request) {
     include: {
       enrollments: {
         include: {
-          course: true
-        }
-      }
+          course: {
+            include: {
+              modules: {
+                include: {
+                  lessons: {
+                    include: {
+                      progress: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
     },
   });
 
   if (!student) {
-    return NextResponse.json(
-      { error: "Student not found" },
-      { status: 404 }
-    );
+    return NextResponse.json({ error: "Student not found" }, { status: 404 });
   }
 
   // Extract just the courses from enrollments
-  const courses = student.enrollments.map(enrollment => enrollment.course);
+  const courses = student.enrollments.map((enrollment) => enrollment.course);
 
   return NextResponse.json({ courses });
 }

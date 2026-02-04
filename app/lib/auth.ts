@@ -18,7 +18,7 @@ export const auth = betterAuth({
             await prisma.$transaction(async (tx) => {
               // Create student record
               const student = await tx.student.create({
-                data: { userId: user.id },
+                data: { userId: user.id, name: user.name },
               });
 
               // Find the first published course Here Have a different set up later

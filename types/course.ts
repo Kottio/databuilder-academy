@@ -4,7 +4,25 @@ export interface Course {
   slug: string;
   description: string;
   price: number;
-  thumbnailUrl: string | null;
+  modules: Array<{
+    id: string;
+    title: string;
+    description: string | null;
+    order: number;
+    accessTier: string;
+    lessons: Array<{
+      id: string;
+      title: string;
+      duration: number;
+      order: number;
+      progress: {
+        completed: boolean;
+        lastWatched: number;
+        updatedAt: string;
+        completedAt: string | null;
+      } | null;
+    }>;
+  }>;
 }
 
 export interface CoursePageResponse {
@@ -75,7 +93,7 @@ export interface LessonPageResponse {
     content: string;
     duration: number;
     order: number;
-    resources: any;
+    resources: JSON | null;
     progress: {
       completed: boolean;
       lastWatched: number;

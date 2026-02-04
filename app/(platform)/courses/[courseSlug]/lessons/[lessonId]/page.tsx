@@ -102,13 +102,15 @@ export default function LessonViewerPage() {
               <MarkdownContent content={lesson.content} />
             </div>
           )}
-          {lesson.resources && lesson.resources.length > 0 && (
+
+          {/* {lesson.resources && lesson.resources.length > 0 && (
             <div className="bg-[#161820] rounded-lg border border-zinc-800/60 p-6">
               <h2 className="text-lg font-semibold text-zinc-200 mb-4">
                 Resources
               </h2>
             </div>
-          )}
+          )} */}
+
           <div className="mt-10">
             <LessonActions
               previous={previous}

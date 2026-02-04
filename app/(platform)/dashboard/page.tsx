@@ -15,6 +15,17 @@ export default function DashboardPage() {
   } = useSWR<{ courses: Course[] }>("/api/me/courses", fetcher);
   const courses = data?.courses;
 
+  const lesson = courses?.flatMap((c) => c.modules.flatMap((m) => m.lessons));
+  const lastLesson = lesson
+    ?.filter((l) => l.progress !== null)
+    ?.sort((a, b) => {
+      return (
+        new Date(b.progress!.updatedAt).getTime() -
+        new Date(a.progress!.updatedAt).getTime()
+      );
+    })[0];
+  console.log(lastLesson);
+
   return (
     <div>
       {/* Welcome Banner */}

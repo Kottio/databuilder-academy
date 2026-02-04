@@ -78,11 +78,11 @@ model Verification {
 
 model Student {
   id        String   @id @default(cuid())
-  userId    String   @unique
+  userId    String   @unique @map("user_id")
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  name      String   @default("Data Padawan")
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
   enrollments Enrollment[]
@@ -101,11 +101,10 @@ model Course {
   title        String
   slug         String       @unique
   description  String       @db.Text
-  thumbnailUrl String?
   price        Int          // Price in cents (9900 = €99)
   published    Boolean      @default(false)
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  createdAt    DateTime     @default(now()) @map("created_at")
+  updatedAt    DateTime     @updatedAt @map("updated_at")
 
   // Relations
   modules     Module[]
@@ -118,16 +117,16 @@ model Course {
 
 model Module {
   id          String     @id @default(cuid())
-  courseId    String
+  courseId    String     @map("course_id")
   course      Course     @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   title       String
   description String?    @db.Text
   order       Int
-  accessTier  AccessType @default(FREE) // What access level is required
+  accessTier  AccessType @default(FREE) @map("access_tier")
 
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
 
   // Relations
   lessons     Lesson[]
@@ -138,18 +137,18 @@ model Module {
 
 model Lesson {
   id        String   @id @default(cuid())
-  moduleId  String
+  moduleId  String   @map("module_id")
   module    Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   title       String
-  videoUrl    String   // YouTube embed URL
-  content     String   @db.Text // Markdown content
-  duration    Int      // Duration in minutes
+  videoUrl    String   @map("video_url")
+  content     String   @db.Text
+  duration    Int
   order       Int
-  resources   Json?    // JSON array of resources
+  resources   Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   // Relations
   progress  Progress[]
@@ -164,17 +163,17 @@ model Lesson {
 
 model Enrollment {
   id        String           @id @default(cuid())
-  studentId String
+  studentId String           @map("student_id")
   student   Student          @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  courseId  String
+  courseId  String            @map("course_id")
   course    Course           @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
-  accessType AccessType       @default(FREE) // Current access level
+  accessType AccessType       @default(FREE) @map("access_type")
   status     EnrollmentStatus @default(ACTIVE)
 
-  enrolledAt  DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-  completedAt DateTime? // When student completed all lessons
+  enrolledAt  DateTime @default(now()) @map("enrolled_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+  completedAt DateTime? @map("completed_at")
 
   // Relations
   payments Payment[]
@@ -204,21 +203,21 @@ enum EnrollmentStatus {
 
 model Payment {
   id           String        @id @default(cuid())
-  studentId    String
+  studentId    String        @map("student_id")
   student      Student       @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  enrollmentId String
+  enrollmentId String        @map("enrollment_id")
   enrollment   Enrollment    @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
 
   // Stripe data
-  stripePaymentId  String? @unique
-  stripeCustomerId String?
+  stripePaymentId  String? @unique @map("stripe_payment_id")
+  stripeCustomerId String? @map("stripe_customer_id")
 
   amount   Int           // Amount in cents (9900 = €99)
   currency String        @default("eur")
   status   PaymentStatus
 
-  createdAt DateTime  @default(now())
-  paidAt    DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  paidAt    DateTime? @map("paid_at")
 
   @@index([studentId])
   @@index([enrollmentId])
@@ -238,22 +237,22 @@ enum PaymentStatus {
 
 model Progress {
   id          String   @id @default(cuid())
-  studentId   String
+  studentId   String   @map("student_id")
   student     Student  @relation(fields: [studentId], references: [id], onDelete: Cascade)
-  lessonId    String
+  lessonId    String   @map("lesson_id")
   lesson      Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
 
   completed   Boolean   @default(false)
-  lastWatched Int       @default(0) // Video timestamp in seconds
-  completedAt DateTime? // When lesson was marked complete
+  completedAt DateTime? @map("completed_at")
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   @@unique([studentId, lessonId])
   @@index([studentId])
   @@index([lessonId])
-  @@index([studentId, completed]) // Query completed lessons by student
+  @@index([studentId, completed])
+  @@index([studentId, updatedAt])
   @@map("progress")
 }
 
