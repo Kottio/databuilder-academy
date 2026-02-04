@@ -63,6 +63,20 @@ export async function GET(
     );
   }
 
+  const progress = await prisma.progress.upsert({
+    where: {
+      studentId_lessonId: {
+        studentId: student.id,
+        lessonId,
+      },
+    },
+    create: {
+      studentId: student.id,
+      lessonId,
+    },
+    update: {},
+  });
+
   return NextResponse.json({
     lesson: {
       id: lesson.id,
