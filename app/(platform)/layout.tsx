@@ -2,6 +2,7 @@
 
 import { useSession, signOut } from "@/app/lib/auth-client";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect } from "react";
 
@@ -35,8 +36,24 @@ export default function PlatformLayout({ children }: { children: ReactNode }) {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="flex h-16 items-center justify-between">
             {/* Logo */}
-            <Link href="/dashboard" className="text-xl font-bold text-emerald-400">
-              Data Builder Academy
+            <Link href="/dashboard" className="flex items-center gap-3">
+              <div className="relative w-9 h-9 rounded-full bg-white overflow-hidden shrink-0">
+                <Image
+                  src="/kottioDev/face.PNG"
+                  alt="kottioDev"
+                  fill
+                  className="object-cover"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-lg font-bold text-white uppercase tracking-wide">
+                  Kottio.Dev
+                </span>
+                <span className="text-zinc-600">|</span>
+                <span className="text-lg font-semibold text-emerald-400">
+                  Data Builder Academy
+                </span>
+              </div>
             </Link>
 
             {/* Navigation Links */}
