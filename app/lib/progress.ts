@@ -1,12 +1,4 @@
-interface Module {
-  lessons: Array<{
-    id: string;
-    duration: number;
-    progress: {
-      completed: boolean;
-    } | null;
-  }>;
-}
+import type { Module } from "@/types/course";
 
 interface ModuleWithDescription extends Module {
   description: string | null;
@@ -15,7 +7,7 @@ interface ModuleWithDescription extends Module {
 export function calculateCourseProgress(modules: Module[]) {
   const completedLessonIds = modules
     .flatMap((m) => m.lessons)
-    .filter((l) => l.progress?.completed)
+    .filter((l) => l.progress[0]?.completed)
     .map((l) => l.id);
 
   const totalLessons = modules.reduce((acc, m) => acc + m.lessons.length, 0);
@@ -49,7 +41,8 @@ export function getCourseStats(modules: Module[]) {
  * Compute stats for the upgrade card from locked modules
  */
 export function getLockedContentStats(lockedModules: ModuleWithDescription[]) {
-  const { totalLessons: lessonCount, totalHours: hours } = getCourseStats(lockedModules);
+  const { totalLessons: lessonCount, totalHours: hours } =
+    getCourseStats(lockedModules);
 
   const highlights = lockedModules
     .filter((m) => m.description)

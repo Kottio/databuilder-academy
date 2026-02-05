@@ -74,7 +74,7 @@ export async function GET(
       studentId: student.id,
       lessonId,
     },
-    update: {},
+    update: { updatedAt: new Date() },
   });
 
   return NextResponse.json({

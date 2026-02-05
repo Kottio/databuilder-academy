@@ -25,7 +25,7 @@ export function LessonSidebarModuleCard({
       <div className="space-y-1">
         {module.lessons.map((lesson) => {
           const isCurrentLesson = lesson.id === currentLessonId;
-          const isCompleted = lesson.progress?.completed || false;
+          const isCompleted = lesson.progress[0]?.completed || false;
 
           if (isLocked) {
             return (

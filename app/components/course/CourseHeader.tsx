@@ -1,17 +1,23 @@
 import Link from "next/link";
 import { getCourseStats, calculateCourseProgress } from "@/app/lib/progress";
-import type { CoursePageResponse } from "@/types/course";
+import type { Module, Course } from "@/types/course";
 
 interface CourseHeaderProps {
-  course: CoursePageResponse["course"];
-  accessibleModules: CoursePageResponse["course"]["modules"];
+  course: Course;
+  accessibleModules: Module[];
   hasFullAccess: boolean;
 }
 
-export function CourseHeader({ course, accessibleModules, hasFullAccess }: CourseHeaderProps) {
+export function CourseHeader({
+  course,
+  accessibleModules,
+  hasFullAccess,
+}: CourseHeaderProps) {
   const courseStats = getCourseStats(course.modules);
+
   const { totalLessons, completedLessons, progressPercentage } =
     calculateCourseProgress(accessibleModules);
+  console.log(accessibleModules);
 
   return (
     <div className="mb-8">
@@ -27,12 +33,15 @@ export function CourseHeader({ course, accessibleModules, hasFullAccess }: Cours
       <p className="text-lg text-zinc-400 mb-2">{course.description}</p>
 
       <p className="text-sm text-zinc-500 mb-6">
-        {courseStats.totalLessons} lessons · {courseStats.totalHours} hours of content
+        {courseStats.totalLessons} lessons · {courseStats.totalHours} hours of
+        content
       </p>
 
       <div className="bg-[#161820] rounded-lg border border-zinc-800/60 p-4">
         <div className="flex justify-between text-sm text-zinc-400 mb-2">
-          <span>{hasFullAccess ? "Your progress" : "Free module progress"}</span>
+          <span>
+            {hasFullAccess ? "Your progress" : "Free module progress"}
+          </span>
           <span>
             {completedLessons} / {totalLessons} lessons completed
           </span>

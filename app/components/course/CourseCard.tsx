@@ -1,12 +1,19 @@
 import Link from "next/link";
 import type { Course } from "@/types/course";
 import Image from "next/image";
+import { splitModulesByAccess } from "@/app/lib/access";
+import { calculateCourseProgress } from "@/app/lib/progress";
 
 interface CourseCardProps {
   course: Course;
+  accessType: string;
 }
 
-export function CourseCard({ course }: CourseCardProps) {
+export function CourseCard({ course, accessType }: CourseCardProps) {
+  const { accessible } = splitModulesByAccess(course.modules, accessType);
+  const { progressPercentage, completedLessons, totalLessons } =
+    calculateCourseProgress(accessible);
+  console.log(progressPercentage);
   return (
     <Link
       href={`/courses/${course.slug}`}
@@ -37,7 +44,24 @@ export function CourseCard({ course }: CourseCardProps) {
           {course.description}
         </p>
 
-        <span className="text-xs text-emerald-400 font-medium group-hover:text-emerald-300 transition-colors">
+        <div className="bg-[#161820] rounded-lg  py-2 mb-2">
+          <div className="flex justify-between text-sm text-zinc-400 mb-2">
+            <span>
+              {accessType !== "FREE" ? "Your progress" : "Free module progress"}
+            </span>
+            <span>
+              {completedLessons} / {totalLessons} lessons completed
+            </span>
+          </div>
+          <div className="h-3 bg-zinc-800 rounded-full overflow-hidden">
+            <div
+              className="h-full bg-emerald-500 transition-all"
+              style={{ width: `${progressPercentage}%` }}
+            />
+          </div>
+        </div>
+
+        <span className="text-xs   text-emerald-400 font-medium group-hover:text-emerald-300 transition-colors ">
           Continue learning →
         </span>
       </div>

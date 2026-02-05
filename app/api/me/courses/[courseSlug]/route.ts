@@ -75,7 +75,7 @@ export async function GET(
           title: lesson.title,
           duration: lesson.duration,
           order: lesson.order,
-          progress: lesson.progress[0] || null, // Flatten from array
+          progress: lesson.progress || null,
         })),
       })),
     },
