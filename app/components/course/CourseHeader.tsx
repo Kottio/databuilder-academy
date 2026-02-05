@@ -17,8 +17,6 @@ export function CourseHeader({
 
   const { totalLessons, completedLessons, progressPercentage } =
     calculateCourseProgress(accessibleModules);
-  console.log(accessibleModules);
-
   return (
     <div className="mb-8">
       <Link
