@@ -15,25 +15,23 @@ export function Hero() {
             <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-1.5 mb-6">
               <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
               <span className="text-emerald-400 text-sm font-medium">
-                Module 1 Gratuit
+                Accès immédiat aux données Wisdom Wall
               </span>
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-              De Analyste Excel à{" "}
-              <span className="text-emerald-400">Data Builder Full-Stack</span>
+              De Débutant à{" "}
+              <span className="text-emerald-400">Data Engineer</span>
             </h1>
 
             <p className="text-xl text-zinc-400 mb-8 max-w-xl">
-              Construis des pipelines de données en production avec de vraies
-              données de{" "}
-              <span className="text-white font-medium">Wisdom Wall</span>—pas
-              des datasets Kaggle.
+              Apprends à construire des pipelines de données professionnels meme
+              si tu n&apos;as jamais codé.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <Button href="#pricing" size="lg">
-                Acheter Maintenant
+                Acheter le Cours (€49)
               </Button>
               <Button href="#curriculum" variant="ghost" size="lg">
                 Voir le Programme
@@ -43,17 +41,24 @@ export function Hero() {
             <div className="flex flex-wrap gap-6 text-sm text-zinc-400">
               <div className="flex items-center gap-2">
                 <Check size={16} className="text-emerald-500" />
-                <span>Module 1 gratuit</span>
+                <span>Accès API Wisdom Wall</span>
               </div>
               <div className="flex items-center gap-2">
                 <Check size={16} className="text-emerald-500" />
-                <span>Données réelles de production</span>
+                <span>30 jours satisfait ou remboursé</span>
               </div>
               <div className="flex items-center gap-2">
                 <Check size={16} className="text-emerald-500" />
-                <span>50+ heures de contenu</span>
+                <span>Accès à vie</span>
               </div>
             </div>
+
+            <p className="text-zinc-500 text-sm mt-4">
+              Pas sûr ?{" "}
+              <a href="/signup" className="text-emerald-400 hover:underline">
+                Essaye Module 1 gratuitement
+              </a>
+            </p>
           </div>
 
           {/* Right content - Image placeholder */}
@@ -90,8 +95,8 @@ export function Hero() {
               <div className="text-sm text-zinc-400">Modules</div>
             </div>
             <div className="absolute -top-6 -right-6 bg-zinc-900 border border-zinc-800 rounded-lg p-4 shadow-xl">
-              <div className="text-2xl font-bold text-emerald-400">€99</div>
-              <div className="text-sm text-zinc-400">Accès complet</div>
+              <div className="text-2xl font-bold text-emerald-400">€49</div>
+              <div className="text-sm text-zinc-400">Cours complet</div>
             </div>
           </div>
         </div>

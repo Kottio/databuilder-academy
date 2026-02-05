@@ -39,6 +39,14 @@ export function Button({
   const styles = `${baseStyles} ${variants[variant]} ${sizes[size]} ${className}`;
 
   if (href) {
+    // Use regular anchor for hash links, Next.js Link for routes
+    if (href.startsWith("#")) {
+      return (
+        <a href={href} className={styles}>
+          {children}
+        </a>
+      );
+    }
     return (
       <Link href={href} className={styles}>
         {children}

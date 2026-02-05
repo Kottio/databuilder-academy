@@ -1,12 +1,11 @@
 import { Section } from "@/app/components/ui/Section";
 import { CheckCircle } from "lucide-react";
-import Image from "next/image";
 
 const credentials = [
   "MSc Business Analytics, ESADE",
   "Software Engineering Bootcamp",
   "15+ projets pour startups €1-5M ARR",
-  "10K+ followers TikTok/YouTube",
+  "10K+ followers TikTok/YouTube (contenu gratuit)",
 ];
 
 export function Instructor() {

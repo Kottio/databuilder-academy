@@ -11,19 +11,24 @@ interface FAQItem {
 
 const faqs: FAQItem[] = [
   {
-    question: "C'est quoi Wisdom Wall exactement ?",
+    question: "Module 1 est vraiment gratuit ? C'est quoi le piège ?",
     answer:
-      "Wisdom Wall est une vraie plateforme SaaS B2B qui collecte et analyse des données de feedback utilisateur. Dans ce cours, tu travailles avec leur API de production—mêmes endpoints, même authentification, mêmes données que leurs vrais clients utilisent.",
+      "Aucun piège. Module 1 contient mes vidéos de setup (Git, Bash, Docker) que je publie aussi sur YouTube. Je veux que tu testes ma pédagogie avant de payer. Le projet avec Wisdom Wall commence au Module 2 (payant).",
+  },
+  {
+    question: "Pourquoi Wisdom Wall et pas Kaggle ?",
+    answer:
+      "À partir du Module 2, tu travailles avec l'API réelle de Wisdom Wall (pas disponible dans Module 1 gratuit). Tu apprends auth, pagination, rate limits—exactement comme en production. Pas de CSV simplifiés.",
   },
   {
     question: "Faut-il être développeur pour suivre ce cours ?",
     answer:
-      "Non, mais tu dois être à l'aise avec les bases : ligne de commande, un peu de Python, et SQL basique. Si tu sais écrire un SELECT avec un WHERE, tu peux suivre. Le Module 1 gratuit te permet de tester si le niveau te convient.",
+      "Non ! Ce cours est conçu pour les débutants. Si tu sais utiliser un ordinateur et que tu es motivé, tu peux suivre. Module 1 gratuit te permet de tester si le niveau te convient avant de payer.",
   },
   {
     question: "Combien de temps pour finir le cours ?",
     answer:
-      "Le parcours complet représente 50+ heures de contenu. À raison de 5-10h par semaine, compte 2-3 mois pour tout terminer. Tu gardes l'accès à vie, donc tu avances à ton rythme.",
+      "Le parcours complet représente 35-40 heures de contenu. À raison de 5-10h par semaine, compte 2-3 mois pour tout terminer. Tu gardes l'accès à vie, donc tu avances à ton rythme.",
   },
   {
     question: "Mon entreprise peut-elle rembourser le cours ?",

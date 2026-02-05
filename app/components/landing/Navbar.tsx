@@ -56,8 +56,8 @@ export function Navbar() {
             >
               Connexion
             </Link>
-            <Button href="/signup" size="sm">
-              Commencer
+            <Button href="#pricing" size="sm">
+              Acheter
             </Button>
           </div>
 
@@ -91,8 +91,8 @@ export function Navbar() {
                 >
                   Connexion
                 </Link>
-                <Button href="/signup" className="w-full">
-                  Commencer
+                <Button href="#pricing" className="w-full">
+                  Acheter
                 </Button>
               </div>
             </div>

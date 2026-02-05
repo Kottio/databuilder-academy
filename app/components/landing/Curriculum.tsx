@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Section, SectionHeader } from "@/app/components/ui/Section";
-import { ChevronDown, Lock, Play, Clock } from "lucide-react";
+import { ChevronDown, Lock, Play, Clock, Youtube, Key } from "lucide-react";
 
 interface Module {
   id: number;
@@ -10,19 +10,25 @@ interface Module {
   duration: string;
   tier: "free" | "basic" | "premium";
   lessons: string[];
+  badge?: string;
+  highlight?: string;
 }
 
 const modules: Module[] = [
   {
     id: 1,
     title: "Foundation Setup",
-    duration: "2-3h",
+    duration: "2h",
     tier: "free",
+    badge: "GRATUIT",
+    highlight: "Ces vidéos sont aussi sur YouTube",
     lessons: [
-      "Setup environnement de développement",
-      "Accès API Wisdom Wall",
-      "Introduction à l'architecture moderne",
-      "Premiers pas avec Docker",
+      "Git basics & workflow",
+      "Bash essentials",
+      "Docker introduction",
+      "Python + pyenv setup",
+      "VS Code configuration",
+      "Project folder structure",
     ],
   },
   {
@@ -30,11 +36,12 @@ const modules: Module[] = [
     title: "Container Fundamentals",
     duration: "4h",
     tier: "basic",
+    highlight: "Accès Wisdom Wall débloqué",
     lessons: [
-      "Docker theory & best practices",
-      "Docker Compose multi-services",
+      "Docker + docker-compose avancé",
       "PostgreSQL en container",
       "Metabase local setup",
+      "Connexion à l'API Wisdom Wall",
     ],
   },
   {
@@ -136,7 +143,15 @@ function ModuleCard({ module }: { module: Module }) {
         className="w-full flex items-center justify-between p-5 hover:bg-zinc-800/50 transition-colors"
       >
         <div className="flex items-center gap-4">
-          <div className="w-10 h-10 bg-zinc-800 rounded-lg flex items-center justify-center text-white font-bold">
+          <div
+            className={`w-10 h-10 rounded-lg flex items-center justify-center text-white font-bold ${
+              module.tier === "free"
+                ? "bg-emerald-500"
+                : module.tier === "premium"
+                  ? "bg-purple-500"
+                  : "bg-zinc-800"
+            }`}
+          >
             {module.id}
           </div>
           <div className="text-left">
@@ -163,6 +178,22 @@ function ModuleCard({ module }: { module: Module }) {
 
       {isOpen && (
         <div className="px-5 pb-5 border-t border-zinc-800">
+          {module.highlight && (
+            <div
+              className={`flex items-center gap-2 mt-4 mb-3 text-sm ${
+                module.highlight.includes("YouTube")
+                  ? "text-red-400"
+                  : "text-emerald-400"
+              }`}
+            >
+              {module.highlight.includes("YouTube") ? (
+                <Youtube size={14} />
+              ) : (
+                <Key size={14} />
+              )}
+              <span>{module.highlight}</span>
+            </div>
+          )}
           <ul className="space-y-2 mt-4">
             {module.lessons.map((lesson, index) => (
               <li key={index} className="flex items-center gap-3 text-zinc-400">
@@ -186,7 +217,7 @@ export function Curriculum() {
     <Section id="curriculum" dark>
       <SectionHeader
         title="8 Modules, Du Setup à la Production"
-        subtitle="Un parcours progressif pour devenir Full Stack Data Builder"
+        subtitle="Un parcours progressif pour devenir Data Builder—même en partant de zéro"
       />
 
       <div className="max-w-3xl mx-auto space-y-4">
@@ -195,10 +226,13 @@ export function Curriculum() {
         ))}
       </div>
 
-      <div className="text-center mt-12">
+      <div className="text-center mt-12 space-y-2">
         <p className="text-zinc-500 text-sm">
-          Total: <span className="text-white">50+ heures</span> de contenu
+          Total: <span className="text-white">35-40 heures</span> de contenu
           vidéo et exercices pratiques
+        </p>
+        <p className="text-emerald-400 text-sm">
+          Module 1 gratuit • Modules 2-6 à €49 • Tous les modules à €99
         </p>
       </div>
     </Section>

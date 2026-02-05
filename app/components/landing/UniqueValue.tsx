@@ -7,19 +7,19 @@ const benefits = [
     icon: Shield,
     title: "Vraie API de Production",
     description:
-      "Auth, pagination, rate limits—exactement comme dans le monde réel. Pas de CSV simplifiés.",
+      "À partir du Module 2, tu travailles avec l'API réelle de Wisdom Wall. Auth, pagination, rate limits—exactement comme dans le monde réel.",
   },
   {
     icon: BarChart3,
     title: "Contexte Business Réel",
     description:
-      "Métriques SaaS, KPIs, dashboards clients. Les mêmes données que mes clients utilisent.",
+      "Métriques SaaS, KPIs, dashboards clients. Les mêmes données que mes clients utilisent en production.",
   },
   {
     icon: Briefcase,
     title: "Portfolio Crédible",
     description:
-      "Montre de vrais projets en entretien, pas des tutorials Titanic ou Iris.",
+      "Montre de vrais projets en entretien, pas des tutorials Titanic ou Iris. Des compétences qui comptent.",
   },
 ];
 
@@ -28,7 +28,7 @@ export function UniqueValue() {
     <Section id="value" dark>
       <SectionHeader
         title="Pas de Datasets Kaggle. De Vraies Données de Production."
-        subtitle="Tu travailles avec l'API réelle de Wisdom Wall—les mêmes données que mes clients B2B SaaS utilisent en production."
+        subtitle="À partir du Module 2, tu travailles avec l'API réelle de Wisdom Wall—les mêmes données que mes clients B2B SaaS utilisent en production."
       />
 
       <div className="grid md:grid-cols-3 gap-6 mb-16">

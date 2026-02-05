@@ -1,63 +1,68 @@
 import { Section, SectionHeader } from "@/app/components/ui/Section";
 import { Button } from "@/app/components/ui/Button";
-import { Check, Star, Zap } from "lucide-react";
+import { Check, Star, Zap, Youtube } from "lucide-react";
 
 interface PricingTier {
   name: string;
   price: string;
   description: string;
   features: string[];
+  notIncluded?: string[];
   cta: string;
   href: string;
   popular?: boolean;
   icon?: typeof Star;
+  note?: string;
 }
 
 const tiers: PricingTier[] = [
   {
     name: "Gratuit",
     price: "€0",
-    description: "Découvre le cours",
+    description: "Module 1 seulement (2h)",
     features: [
-      "Module 1 complet",
-      "Setup environnement dev",
-      "Accès API Wisdom Wall",
-      "Support communauté",
+      "Git, Bash, Docker, Python basics",
+      "VS Code configuration",
+      "Parcours structuré + exercices",
+      "Aussi disponible sur YouTube",
     ],
-    cta: "Démarrer",
-    href: "/signup?plan=free",
+    notIncluded: ["Pas d'accès Wisdom Wall"],
+    cta: "Commencer Gratuitement",
+    href: "/signup",
   },
   {
     name: "Basic",
-    price: "€99",
-    description: "Le parcours complet",
+    price: "€49",
+    description: "Modules 1-6 (25-30h)",
     features: [
-      "Modules 1-6",
-      "Docker, pipelines, dashboards",
-      "Orchestration & automation",
-      "Accès données Wisdom Wall",
-      "Support prioritaire",
+      "Tout le contenu gratuit +",
+      "Accès API Wisdom Wall",
+      "Docker + Postgres + Metabase",
+      "Pipelines dlt complets",
+      "Dashboards & automatisation",
+      "Support par commentaires",
     ],
     cta: "Acheter Basic",
     href: "/signup?plan=basic",
     popular: true,
     icon: Star,
+    note: "Commence gratuit, upgrade quand tu veux",
   },
   {
     name: "Premium",
-    price: "€199",
-    description: "Tout inclus + cloud",
+    price: "€99",
+    description: "Tous modules 1-8 (35-40h)",
     features: [
-      "Tous les modules (1-8)",
-      "dbt transformations",
-      "Cloud deployment",
+      "Tout Basic +",
+      "dbt transformations (Module 7)",
+      "Cloud deployment DigitalOcean (Module 8)",
       "Accès à vie + updates",
       "Support prioritaire",
-      "Certificat de completion",
     ],
     cta: "Acheter Premium",
     href: "/signup?plan=premium",
     icon: Zap,
+    note: "Économise €10 vs upgrade later",
   },
 ];
 
@@ -74,7 +79,7 @@ function PricingCard({ tier }: { tier: PricingTier }) {
         <div className="absolute -top-4 left-1/2 -translate-x-1/2">
           <div className="bg-emerald-500 text-white text-sm font-semibold px-4 py-1 rounded-full flex items-center gap-1">
             <Star size={14} fill="white" />
-            Populaire
+            Plus Populaire
           </div>
         </div>
       )}
@@ -90,14 +95,29 @@ function PricingCard({ tier }: { tier: PricingTier }) {
         <p className="text-zinc-400 mt-2">{tier.description}</p>
       </div>
 
-      <ul className="space-y-3 mb-8">
+      <ul className="space-y-3 mb-6">
         {tier.features.map((feature) => (
           <li key={feature} className="flex items-start gap-3">
             <Check className="w-5 h-5 text-emerald-500 shrink-0 mt-0.5" />
             <span className="text-zinc-300">{feature}</span>
           </li>
         ))}
+        {tier.notIncluded?.map((feature) => (
+          <li key={feature} className="flex items-start gap-3">
+            <span className="w-5 h-5 text-zinc-600 shrink-0 mt-0.5 text-center">
+              —
+            </span>
+            <span className="text-zinc-500">{feature}</span>
+          </li>
+        ))}
       </ul>
+
+      {tier.name === "Gratuit" && (
+        <div className="flex items-center justify-center gap-2 text-red-400 text-sm mb-4">
+          <Youtube size={16} />
+          <span>Vidéos aussi sur YouTube</span>
+        </div>
+      )}
 
       <Button
         href={tier.href}
@@ -106,6 +126,10 @@ function PricingCard({ tier }: { tier: PricingTier }) {
       >
         {tier.cta}
       </Button>
+
+      {tier.note && (
+        <p className="text-center text-zinc-500 text-sm mt-4">{tier.note}</p>
+      )}
     </div>
   );
 }
@@ -128,7 +152,7 @@ export function Pricing() {
         <div className="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-2">
           <Check className="w-4 h-4 text-emerald-500" />
           <span className="text-emerald-400 text-sm">
-            Données Wisdom Wall incluses dans tous les tiers
+            Accès Wisdom Wall inclus dans Basic et Premium
           </span>
         </div>
         <p className="text-zinc-500">30 jours satisfait ou remboursé</p>
