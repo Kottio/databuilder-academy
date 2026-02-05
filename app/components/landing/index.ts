@@ -1,0 +1,10 @@
+export { Navbar } from "./Navbar";
+export { Hero } from "./Hero";
+export { UniqueValue } from "./UniqueValue";
+export { Architecture } from "./Architecture";
+export { Curriculum } from "./Curriculum";
+export { Instructor } from "./Instructor";
+export { Pricing } from "./Pricing";
+export { FAQ } from "./FAQ";
+export { FinalCTA } from "./FinalCTA";
+export { Footer } from "./Footer";
