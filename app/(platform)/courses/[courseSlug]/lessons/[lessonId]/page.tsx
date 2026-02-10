@@ -11,6 +11,7 @@ import { fetcher } from "@/app/lib/fetcher";
 import { getLessonNavigation } from "@/app/lib/lesson";
 import type { CoursePageResponse, LessonPageResponse } from "@/types/course";
 import { LessonActions } from "@/app/components/lesson/LessonActions";
+import { LessonResources } from "@/app/components/lesson/LessonResources";
 
 export default function LessonViewerPage() {
   const params = useParams();
@@ -97,19 +98,15 @@ export default function LessonViewerPage() {
             completed={completed}
           />
 
+          {lesson.resources && lesson.resources.length > 0 && (
+            <LessonResources resources={lesson.resources} />
+          )}
+
           {lesson.content && (
             <div className="mb-8">
               <MarkdownContent content={lesson.content} />
             </div>
           )}
-
-          {/* {lesson.resources && lesson.resources.length > 0 && (
-            <div className="bg-[#161820] rounded-lg border border-zinc-800/60 p-6">
-              <h2 className="text-lg font-semibold text-zinc-200 mb-4">
-                Resources
-              </h2>
-            </div>
-          )} */}
 
           <div className="mt-10">
             <LessonActions

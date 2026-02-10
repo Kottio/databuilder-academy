@@ -41,6 +41,13 @@ export interface CoursePageResponse {
   status: string;
 }
 
+export interface LessonResource {
+  id: string;
+  type: "link" | "github" | "notion";
+  title: string;
+  url: string;
+}
+
 export interface LessonPageResponse {
   lesson: {
     id: string;
@@ -49,7 +56,7 @@ export interface LessonPageResponse {
     content: string;
     duration: number;
     order: number;
-    resources: JSON | null;
+    resources: string | null; // JSON string of LessonResource[]
     progress: {
       completed: boolean;
       lastWatched: number;
