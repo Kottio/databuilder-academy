@@ -11,8 +11,10 @@ interface CourseCardProps {
 
 export function CourseCard({ course, accessType }: CourseCardProps) {
   const { accessible } = splitModulesByAccess(course.modules, accessType);
+
   const { progressPercentage, completedLessons, totalLessons } =
     calculateCourseProgress(accessible);
+
   return (
     <Link
       href={`/courses/${course.slug}`}

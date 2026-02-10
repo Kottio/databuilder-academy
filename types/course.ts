@@ -30,10 +30,10 @@ export interface Course {
   modules: Module[];
 }
 
-export interface CourseDashboardResponse {
-  courses: Course[];
-  accessType: string;
-}
+// export interface CourseDashboardResponse {
+//   courses: Course[];
+//   accessType: string;
+// }
 
 export interface CoursePageResponse {
   course: Course;

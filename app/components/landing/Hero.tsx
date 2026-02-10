@@ -26,7 +26,7 @@ export function Hero() {
 
             <p className="text-xl text-zinc-400 mb-8 max-w-xl">
               Apprends à construire des pipelines de données professionnels meme
-              si tu n&apos;as jamais codé.
+              gss si tu n&apos;as jamais codé.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">

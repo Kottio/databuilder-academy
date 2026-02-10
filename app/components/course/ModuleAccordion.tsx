@@ -54,7 +54,7 @@ export function ModuleAccordion({
       {/* Lessons List */}
       <div className="divide-y divide-zinc-800/60">
         {module.lessons.map((lesson) => {
-          const isCompleted = lesson.progress?.completed || false;
+          const isCompleted = lesson.progress[0]?.completed || false;
 
           return (
             <Link

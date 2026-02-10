@@ -6,7 +6,7 @@ import { useSession } from "@/app/lib/auth-client";
 import { Play, Clock, BookOpen } from "lucide-react";
 import { CourseCard } from "@/app/components/course/CourseCard";
 import { fetcher } from "@/app/lib/fetcher";
-import type { CourseDashboardResponse, Course } from "@/types/course";
+import type { CoursePageResponse, Course } from "@/types/course";
 
 function getLastLesson(courses: Course[]) {
   const lesson = courses.flatMap((c) =>
@@ -37,11 +37,18 @@ export default function DashboardPage() {
     data,
     isLoading,
     error: isError,
-  } = useSWR<CourseDashboardResponse>("/api/me/courses", fetcher, {
+  } = useSWR<CoursePageResponse[]>("/api/me/courses", fetcher, {
     revalidateOnFocus: true,
   });
-  const courses = data?.courses;
-  const accessType = data?.accessType || "FREE";
+
+  if (!data) {
+    return;
+  }
+
+  const courses = data.flatMap((c) => c.course);
+  const accessTypes = data.map((c) => {
+    return { courseSlug: c.course.slug, accessType: c.accessType };
+  });
 
   const lastLesson = courses ? getLastLesson(courses) : null;
 
@@ -75,7 +82,10 @@ export default function DashboardPage() {
                 <CourseCard
                   key={course.id}
                   course={course}
-                  accessType={accessType}
+                  accessType={
+                    accessTypes.filter((c) => c.courseSlug == course.slug)[0]
+                      .accessType
+                  }
                 />
               ))}
             </div>
