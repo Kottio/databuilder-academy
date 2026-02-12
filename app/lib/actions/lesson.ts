@@ -24,7 +24,7 @@ export async function createLesson(
     data: {
       moduleId,
       title: data.title,
-      videoUrl: data.videoUrl,
+      videoUrl: data.videoUrl || "",
       content: data.content,
       duration: data.duration,
       order: nextOrder,
@@ -33,4 +33,39 @@ export async function createLesson(
 
   revalidatePath("/admin");
   return lesson;
+}
+
+export async function updateLesson(
+  lessonId: string,
+  data: {
+    title: string;
+    videoUrl: string;
+    content: string;
+    duration: number;
+  },
+) {
+  await requireAdmin();
+
+  const updated = await prisma.lesson.update({
+    where: { id: lessonId },
+    data: {
+      title: data.title,
+      videoUrl: data.videoUrl,
+      content: data.content,
+      duration: data.duration,
+    },
+  });
+
+  revalidatePath("/admin");
+  return updated;
+}
+
+export async function deleteLesson(lessonId: string) {
+  await requireAdmin();
+
+  await prisma.lesson.delete({
+    where: { id: lessonId },
+  });
+
+  revalidatePath("/admin");
 }

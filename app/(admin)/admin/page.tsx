@@ -6,7 +6,9 @@ import { CourSelector } from "@/app/components/admin/CourseSelector";
 import type { CourseAdmin } from "@/app/components/admin/CourseSelector";
 import { ModuleCard } from "@/app/components/admin/AdminModuleCard";
 import { LessonModal } from "@/app/components/admin/LessonModal";
-import { createLesson } from "@/app/lib/actions/lesson";
+import { ModuleModal } from "@/app/components/admin/ModuleModal";
+import { createLesson, updateLesson, deleteLesson } from "@/app/lib/actions/lesson";
+import { createModule, updateModule } from "@/app/lib/actions/modules";
 
 export default function AdminPage() {
   const [courses, setCourses] = useState<CourseAdmin[] | []>([]);
@@ -14,6 +16,9 @@ export default function AdminPage() {
   const [selectedCourseId, setSelectedCourseId] = useState<string | null>(null);
 
   const [showCreateLesson, setShowCreateLesson] = useState(false);
+  const [showCreateModule, setShowCreateModule] = useState(false);
+  const [moduleToEdit, setModuleToEdit] = useState<any>(null);
+  const [lessonToEdit, setLessonToEdit] = useState<any>(null);
   const [selectedModuleId, setSelectedModuleId] = useState<string | null>(null);
   const [selectedModuleTitle, setSelectedModuleTitle] = useState("");
 
@@ -34,15 +39,23 @@ export default function AdminPage() {
   }, [selectedCourseId]);
 
   const handleAddLesson = (moduleId: string, moduleTitle: string) => {
+    setLessonToEdit(null); // Reset pour mode création
     setSelectedModuleId(moduleId);
     setSelectedModuleTitle(moduleTitle);
     setShowCreateLesson(true);
   };
 
-  const handleCreateLesson = async (data: any) => {
-    if (!selectedModuleId) return;
+  const handleSubmitLesson = async (data: any) => {
+    if (lessonToEdit) {
+      // Mode édition
+      await updateLesson(lessonToEdit.id, data);
+      setLessonToEdit(null);
+    } else {
+      // Mode création
+      if (!selectedModuleId) return;
+      await createLesson(selectedModuleId, data);
+    }
 
-    await createLesson(selectedModuleId, data);
     setShowCreateLesson(false);
 
     // Recharger le cours
@@ -52,7 +65,51 @@ export default function AdminPage() {
     }
   };
 
-  // console.log(courses.filter((c) => c.id == selectedCourseId)[0].title);
+  const handleEditLesson = (lesson: any, moduleTitle: string) => {
+    setLessonToEdit(lesson);
+    setSelectedModuleTitle(moduleTitle);
+    setShowCreateLesson(true);
+  };
+
+  const handleSubmitModule = async (data: {
+    title: string;
+    description: string;
+    accessTier: "FREE" | "PAID";
+  }) => {
+    if (moduleToEdit) {
+      // Mode édition
+      await updateModule(moduleToEdit.id, data);
+      setModuleToEdit(null);
+    } else {
+      // Mode création
+      if (!selectedCourseId) return;
+      await createModule(selectedCourseId, data);
+    }
+
+    setShowCreateModule(false);
+
+    // Recharger le cours
+    if (selectedCourseId) {
+      const updated = await getCourseWithModules(selectedCourseId);
+      setCourse(updated);
+    }
+  };
+
+  const handleEditModule = (module: any) => {
+    setModuleToEdit(module);
+    setShowCreateModule(true);
+  };
+
+  const handleDeleteLesson = async (lessonId: string) => {
+    if (!confirm("Supprimer cette leçon ?")) return;
+
+    await deleteLesson(lessonId);
+    // Recharger le cours
+    if (selectedCourseId) {
+      const updated = await getCourseWithModules(selectedCourseId);
+      setCourse(updated);
+    }
+  };
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-2">Admin Dashboard</h1>
@@ -75,20 +132,23 @@ export default function AdminPage() {
             <ModuleCard
               key={module.id}
               module={module}
-              onEditModule={() => console.log("Edit module:", module.id)}
+              onEditModule={() => handleEditModule(module)}
               onAddLesson={() => handleAddLesson(module.id, module.title)}
-              onEditLesson={(lessonId) => console.log("Edit lesson:", lessonId)}
-              onDeleteLesson={(lessonId) =>
-                console.log("Delete lesson:", lessonId)
-              }
+              onEditLesson={(lessonId) => {
+                const lesson = module.lessons.find((l: any) => l.id === lessonId);
+                if (lesson) handleEditLesson(lesson, module.title);
+              }}
+              onDeleteLesson={handleDeleteLesson}
             />
           ))}
 
           {/* Bouton ajouter module */}
           <button
-            onClick={() => console.log("Add new module", course.id)}
-            className="w-full py-4 border-2 border-dashed border-zinc-700 rounded-lg text-zinc-500 hover:border-emerald-500 hover:text-emerald-400
-  transition-colors"
+            onClick={() => {
+              setModuleToEdit(null);
+              setShowCreateModule(true);
+            }}
+            className="w-full py-4 border-2 border-dashed border-zinc-700 rounded-lg text-zinc-500 hover:border-emerald-500 hover:text-emerald-400 transition-colors"
           >
             + Ajouter un module
           </button>
@@ -97,10 +157,23 @@ export default function AdminPage() {
 
       <LessonModal
         isOpen={showCreateLesson}
-        onClose={() => setShowCreateLesson(false)}
-        onSubmit={handleCreateLesson}
-        lesson={null}
+        onClose={() => {
+          setShowCreateLesson(false);
+          setLessonToEdit(null);
+        }}
+        onSubmit={handleSubmitLesson}
+        lesson={lessonToEdit}
         moduleTitle={selectedModuleTitle}
+      />
+
+      <ModuleModal
+        isOpen={showCreateModule}
+        onClose={() => {
+          setShowCreateModule(false);
+          setModuleToEdit(null);
+        }}
+        onSubmit={handleSubmitModule}
+        module={moduleToEdit}
       />
     </div>
   );

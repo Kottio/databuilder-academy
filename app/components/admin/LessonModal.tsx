@@ -33,14 +33,16 @@ export function LessonModal({
     duration: 0,
   });
 
-  // Remplir le form si édition
+  // Remplir le form si édition, reset si création
   useEffect(() => {
-    if (lesson) {
-      setFormData(lesson);
-    } else {
-      setFormData({ title: "", videoUrl: "", content: "", duration: 0 });
+    if (isOpen) {
+      if (lesson) {
+        setFormData(lesson);
+      } else {
+        setFormData({ title: "", videoUrl: "", content: "", duration: 0 });
+      }
     }
-  }, [lesson]);
+  }, [lesson, isOpen]);
 
   if (!isOpen) return null;
 
@@ -111,8 +113,7 @@ export function LessonModal({
                 setFormData({ ...formData, videoUrl: e.target.value })
               }
               className="w-full px-4 py-3 bg-zinc-900 border border-zinc-700 rounded-lg text-zinc-100 focus:border-emerald-500 focus:outline-none"
-              placeholder="https://www.youtube.com/watch?v=..."
-              required
+              placeholder="https://www.youtube.com/watch?v=... (optionnel)"
             />
             {/* Preview YouTube */}
             {youtubeId && (

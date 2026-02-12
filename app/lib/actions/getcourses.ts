@@ -32,6 +32,8 @@ export async function getCourseWithModules(courseId: string) {
             select: {
               id: true,
               title: true,
+              videoUrl: true,
+              content: true,
               duration: true,
               order: true,
             },

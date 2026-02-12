@@ -61,6 +61,11 @@ export default function LessonViewerPage() {
     });
   };
 
+  const getYouTubeEmbedUrl = (url: string) => {
+    const match = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([^&\s]+)/);
+    return match ? `https://www.youtube.com/embed/${match[1]}` : url;
+  };
+
   return (
     <div className="flex h-[calc(100vh-4rem)]">
       <aside
@@ -81,14 +86,16 @@ export default function LessonViewerPage() {
 
           <h1 className="text-3xl font-bold text-white mb-6">{lesson.title}</h1>
 
-          <div className="aspect-video bg-black rounded-lg overflow-hidden mb-8 border border-zinc-800/60">
-            <iframe
-              src={lesson.videoUrl}
-              className="w-full h-full"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-          </div>
+          {lesson.videoUrl && (
+            <div className="aspect-video bg-black rounded-lg overflow-hidden mb-8 border border-zinc-800/60">
+              <iframe
+                src={getYouTubeEmbedUrl(lesson.videoUrl)}
+                className="w-full h-full"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+            </div>
+          )}
 
           <LessonActions
             previous={previous}
