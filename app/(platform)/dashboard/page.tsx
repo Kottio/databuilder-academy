@@ -33,6 +33,7 @@ function getLastLesson(courses: Course[]) {
 
 export default function DashboardPage() {
   const { data: session } = useSession();
+  console.log(session?.user.role);
   const {
     data,
     isLoading,

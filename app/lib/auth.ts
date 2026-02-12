@@ -10,7 +10,6 @@ async function createStudentWithRetry(
   for (let attempt = 1; attempt <= maxRetries; attempt++) {
     try {
       await prisma.$transaction(async (tx) => {
-        // Check if student already exists (idempotent)
         const existing = await tx.student.findUnique({
           where: { userId },
         });
@@ -56,6 +55,14 @@ export const auth = betterAuth({
   }),
   emailAndPassword: {
     enabled: true,
+  },
+  user: {
+    additionalFields: {
+      role: {
+        type: "string",
+        defaultValue: "user",
+      },
+    },
   },
   databaseHooks: {
     user: {

@@ -7,8 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-// Better Auth will automatically generate its user/session tables
-// We'll add our course models here later
 
 model User {
   id            String    @id
@@ -20,6 +18,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  role         String @default("user")
   student      Student?
 
   @@unique([email])
