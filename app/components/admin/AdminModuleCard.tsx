@@ -1,6 +1,6 @@
 "use client";
 
-import { Pencil, Trash2, Plus } from "lucide-react";
+import { Pencil, Trash2, Plus, ChevronUp, ChevronDown } from "lucide-react";
 
 interface Lesson {
   id: string;
@@ -22,6 +22,7 @@ interface ModuleCardProps {
   onAddLesson: () => void;
   onEditLesson: (lessonId: string) => void;
   onDeleteLesson: (lessonId: string) => void;
+  onMoveLesson: (lessonId: string, direction: "up" | "down") => void;
 }
 
 export function ModuleCard({
@@ -30,7 +31,10 @@ export function ModuleCard({
   onAddLesson,
   onEditLesson,
   onDeleteLesson,
+  onMoveLesson,
 }: ModuleCardProps) {
+  const sortedLessons = [...module.lessons].sort((a, b) => a.order - b.order);
+
   return (
     <div className="bg-[#161820] border border-zinc-800/60 rounded-lg overflow-hidden">
       {/* Header du module */}
@@ -60,19 +64,36 @@ export function ModuleCard({
 
       {/* Liste des leçons */}
       <div className="divide-y divide-zinc-800/40">
-        {module.lessons.map((lesson) => (
+        {sortedLessons.map((lesson, index) => (
           <div
             key={lesson.id}
-            className="flex items-center justify-between px-4 py-3 hover:bg-zinc-800/20"
+            className="flex items-center justify-between px-4 py-2 hover:bg-zinc-800/20"
           >
             <div className="flex items-center gap-3">
-              <span className="text-sm text-zinc-500 w-6">{lesson.order}.</span>
+              <span className="text-sm text-zinc-500 w-6">{index + 1}.</span>
               <span className="text-zinc-200">{lesson.title}</span>
-              <span className="text-xs text-zinc-500">
-                {lesson.duration} min
-              </span>
+              <span className="text-xs text-zinc-500">{lesson.duration} min</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-1">
+              {/* Boutons réordonnement */}
+              <button
+                onClick={() => onMoveLesson(lesson.id, "up")}
+                disabled={index === 0}
+                className="text-zinc-600 hover:text-zinc-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors p-1"
+              >
+                <ChevronUp size={16} />
+              </button>
+              <button
+                onClick={() => onMoveLesson(lesson.id, "down")}
+                disabled={index === sortedLessons.length - 1}
+                className="text-zinc-600 hover:text-zinc-300 disabled:opacity-30 disabled:cursor-not-allowed transition-colors p-1"
+              >
+                <ChevronDown size={16} />
+              </button>
+
+              <div className="w-px h-4 bg-zinc-700 mx-1" />
+
+              {/* Boutons edit/delete */}
               <button
                 onClick={() => onEditLesson(lesson.id)}
                 className="text-zinc-500 hover:text-emerald-400 transition-colors p-1"
@@ -93,8 +114,7 @@ export function ModuleCard({
       {/* Bouton ajouter leçon */}
       <button
         onClick={onAddLesson}
-        className="w-full px-4 py-3 flex items-center justify-center gap-2 text-zinc-500 hover:text-emerald-400 hover:bg-zinc-800/30 transition-colors
-  border-t border-zinc-800/60"
+        className="w-full px-4 py-3 flex items-center justify-center gap-2 text-zinc-500 hover:text-emerald-400 hover:bg-zinc-800/30 transition-colors border-t border-zinc-800/60"
       >
         <Plus size={16} />
         <span className="text-sm">Ajouter une leçon</span>

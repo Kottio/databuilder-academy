@@ -69,3 +69,26 @@ export async function deleteLesson(lessonId: string) {
 
   revalidatePath("/admin");
 }
+
+export async function swapLessonOrder(lessonId1: string, lessonId2: string) {
+  await requireAdmin();
+
+  const lesson1 = await prisma.lesson.findUnique({ where: { id: lessonId1 } });
+  const lesson2 = await prisma.lesson.findUnique({ where: { id: lessonId2 } });
+
+  if (!lesson1 || !lesson2) return;
+
+  // Swap les orders
+  await prisma.$transaction([
+    prisma.lesson.update({
+      where: { id: lessonId1 },
+      data: { order: lesson2.order },
+    }),
+    prisma.lesson.update({
+      where: { id: lessonId2 },
+      data: { order: lesson1.order },
+    }),
+  ]);
+
+  revalidatePath("/admin");
+}

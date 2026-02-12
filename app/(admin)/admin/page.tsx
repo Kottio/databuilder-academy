@@ -7,7 +7,7 @@ import type { CourseAdmin } from "@/app/components/admin/CourseSelector";
 import { ModuleCard } from "@/app/components/admin/AdminModuleCard";
 import { LessonModal } from "@/app/components/admin/LessonModal";
 import { ModuleModal } from "@/app/components/admin/ModuleModal";
-import { createLesson, updateLesson, deleteLesson } from "@/app/lib/actions/lesson";
+import { createLesson, updateLesson, deleteLesson, swapLessonOrder } from "@/app/lib/actions/lesson";
 import { createModule, updateModule } from "@/app/lib/actions/modules";
 
 export default function AdminPage() {
@@ -110,6 +110,23 @@ export default function AdminPage() {
       setCourse(updated);
     }
   };
+
+  const handleMoveLesson = async (lessonId: string, direction: "up" | "down", moduleLessons: any[]) => {
+    const sorted = [...moduleLessons].sort((a, b) => a.order - b.order);
+    const index = sorted.findIndex((l) => l.id === lessonId);
+
+    const swapIndex = direction === "up" ? index - 1 : index + 1;
+    if (swapIndex < 0 || swapIndex >= sorted.length) return;
+
+    const otherLesson = sorted[swapIndex];
+    await swapLessonOrder(lessonId, otherLesson.id);
+
+    // Recharger le cours
+    if (selectedCourseId) {
+      const updated = await getCourseWithModules(selectedCourseId);
+      setCourse(updated);
+    }
+  };
   return (
     <div>
       <h1 className="text-2xl font-bold text-white mb-2">Admin Dashboard</h1>
@@ -139,6 +156,7 @@ export default function AdminPage() {
                 if (lesson) handleEditLesson(lesson, module.title);
               }}
               onDeleteLesson={handleDeleteLesson}
+              onMoveLesson={(lessonId, direction) => handleMoveLesson(lessonId, direction, module.lessons)}
             />
           ))}
 
